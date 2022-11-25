@@ -1,0 +1,31 @@
+{
+    "name": "smanis",
+    "version": "0.1.0",
+    "description": "Smart tennis rating system",
+    "main": "index.js",
+    "scripts": {
+        "preinstall": "npx only-allow pnpm",
+        "prepare": "husky install",
+        "commit": "git-cz",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "config": {
+        "commitizen": {
+            "path": "node_modules/cz-conventional-changelog"
+        }
+    },
+    "keywords": [],
+    "author": {
+        "name": "Pcrab",
+        "email": "pcrab@pcrab.xyz",
+        "url": "https://github.com/Pcrab"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "@commitlint/cli": "^17.3.0",
+        "@commitlint/config-conventional": "^17.3.0",
+        "commitizen": "^4.2.5",
+        "cz-conventional-changelog": "^3.3.0",
+        "husky": "^8.0.2"
+    }
+}
