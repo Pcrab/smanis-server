@@ -1,3 +1,4 @@
 node_modules
+.idea
 /packages/frontend/dist/assets/*
 /packages/backend/dist
