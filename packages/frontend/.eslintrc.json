@@ -1,0 +1,9 @@
+{
+    "env": {
+        "browser": true
+    },
+    "extends": ["../../.eslintrc.json", "plugin:react/recommended"],
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    }
+}

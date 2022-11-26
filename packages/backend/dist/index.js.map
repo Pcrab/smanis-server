@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/index.ts"],
+  "sourcesContent": ["import { ApolloServer } from \"@apollo/server\";\nimport { startStandaloneServer } from \"@apollo/server/standalone\";\n\nconst typeDefs = `#graphql\n# Comments in GraphQL strings (such as this one) start with the hash (#) symbol.\n\n# This \"Book\" type defines the queryable fields for every book in our data source.\ntype Book {\n    title: String\n    author: String\n}\n\n# The \"Query\" type is special: it lists all of the available queries that\n# clients can execute, along with the return type for each. In this\n# case, the \"books\" query returns an array of zero or more Books (defined above).\ntype Query {\n    books: [Book]\n}\n`;\n\nconst resolvers = {\n    Query: {\n        books: () => [],\n    },\n};\n\nconst server = new ApolloServer({\n    resolvers,\n    typeDefs,\n});\n\nconst { url } = await startStandaloneServer(server, {\n    listen: { port: 20080 },\n});\n\nconsole.log(`Backend server started at ${url}`);\n"],
+  "mappings": "AAAA,OAAS,gBAAAA,MAAoB,iBAC7B,OAAS,yBAAAC,MAA6B,4BAEtC,MAAMC,EAAW;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,EAiBXC,EAAY,CACd,MAAO,CACH,MAAO,IAAM,CAAC,CAClB,CACJ,EAEMC,EAAS,IAAIJ,EAAa,CAC5B,UAAAG,EACA,SAAAD,CACJ,CAAC,EAEK,CAAE,IAAAG,CAAI,EAAI,MAAMJ,EAAsBG,EAAQ,CAChD,OAAQ,CAAE,KAAM,KAAM,CAC1B,CAAC,EAED,QAAQ,IAAI,6BAA6BC,GAAK",
+  "names": ["ApolloServer", "startStandaloneServer", "typeDefs", "resolvers", "server", "url"]
+}

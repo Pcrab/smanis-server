@@ -1,0 +1,22 @@
+{
+    "name": "backend",
+    "version": "0.1.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+        "dev": "nodemon",
+        "start": "ts-node --esm compile.ts",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@apollo/server": "^4.2.1"
+    },
+    "devDependencies": {
+        "@types/nodemon": "^1.19.2",
+        "nodemon": "^2.0.20"
+    }
+}
