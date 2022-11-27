@@ -11,22 +11,22 @@ on:
     
 jobs:
   install:
-    uses: ./.github/workflows/fbend/prepare.yml
+    uses: ./.github/workflows/prepare.yml
 
   check:
-    uses: ./.github/workflows/fbend/prepare.yml
+    uses: ./.github/workflows/prepare.yml
     needs: [install]
     with:
       action: 'check'
 
   compile:
-    uses: ./.github/workflows/fbend/prepare.yml
+    uses: ./.github/workflows/prepare.yml
     needs: [install]
     with:
       action: 'compile'
 
   lint:
-    uses: ./.github/workflows/fbend/prepare.yml
+    uses: ./.github/workflows/prepare.yml
     needs: [install]
     with:
       action: 'lint'
