@@ -18,6 +18,7 @@
         "christian-kohler.path-intellisense",
         "esbenp.prettier-vscode",
         "ms-python.python",
-        "KevinRose.vsc-python-indent"
+        "KevinRose.vsc-python-indent",
+        "redhat.vscode-yaml"
     ]
 }
