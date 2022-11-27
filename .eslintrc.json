@@ -2,6 +2,7 @@
     "env": {
         "es2022": true
     },
+    "ignorePatterns": [".husky", "node_modules", "algorithm", "dist"],
     "extends": [
         "eslint:recommended",
         "plugin:prettier/recommended",
