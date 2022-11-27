@@ -5,9 +5,10 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
+        "check": "tsc --noEmit",
         "compile": "ts-node --esm compile.ts",
         "dev": "nodemon",
-        "lint": "pnpm exec eslint .",
+        "lint": "exec eslint .",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],

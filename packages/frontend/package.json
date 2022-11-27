@@ -4,17 +4,19 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+        "check": "tsc --noEmit",
         "compile": "ts-node --esm compile.ts",
         "dev": "ts-node --esm watch.ts",
         "lint": "concurrently 'pnpm run lint:file' 'pnpm run lint:style'",
-        "lint:file": "pnpm exec eslint .",
-        "lint:style": "pnpm exec stylelint '**/*.scss'",
+        "lint:file": "eslint .",
+        "lint:style": "stylelint '**/*.scss'",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
     "type": "module",
     "author": "",
     "license": "MIT",
+    "prettier": "@pcrab/prettier-config",
     "devDependencies": {
         "@types/browser-sync": "^2.26.3",
         "@types/command-line-args": "^5.2.0",
@@ -31,7 +33,6 @@
         "stylelint-config-prettier-scss": "^0.0.1",
         "stylelint-config-recommended-scss": "^8.0.0"
     },
-    "prettier": "@pcrab/prettier-config",
     "dependencies": {
         "react": "^18.2.0",
         "react-dom": "^18.2.0"

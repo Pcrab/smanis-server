@@ -8,6 +8,7 @@
         "preinstall": "npx only-allow pnpm",
         "prepare": "husky install",
         "commit": "git-cz",
+        "check": "pnpm run --parallel --filter frontend --filter backend --stream check",
         "compile": "pnpm run --parallel --filter frontend --filter backend --stream compile",
         "dev": "pnpm run --parallel --filter frontend --filter backend --stream dev",
         "lint": "pnpm run --parallel --filter frontend --filter backend --stream lint",
@@ -25,6 +26,7 @@
         "url": "https://github.com/Pcrab"
     },
     "license": "MIT",
+    "prettier": "@pcrab/prettier-config",
     "devDependencies": {
         "@commitlint/cli": "^17.3.0",
         "@commitlint/config-conventional": "^17.3.0",
