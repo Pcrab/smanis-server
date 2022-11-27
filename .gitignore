@@ -3,3 +3,4 @@ node_modules
 /packages/frontend/dist/assets/*
 /packages/backend/dist
 .env
+tsconfig.tsbuildinfo
