@@ -1,0 +1,32 @@
+name: Frontend workflow
+
+on:
+  push:
+    paths:
+      - "packages/backend"
+  pull_request:
+    paths:
+      - "packages/backend"
+  workflow_dispatch:
+    
+jobs:
+  install:
+    uses: ./.github/workflows/fbend/prepare.yml
+
+  check:
+    uses: ./.github/workflows/fbend/prepare.yml
+    needs: [install]
+    with:
+      action: 'check'
+
+  compile:
+    uses: ./.github/workflows/fbend/prepare.yml
+    needs: [install]
+    with:
+      action: 'compile'
+
+  lint:
+    uses: ./.github/workflows/fbend/prepare.yml
+    needs: [install]
+    with:
+      action: 'lint'
