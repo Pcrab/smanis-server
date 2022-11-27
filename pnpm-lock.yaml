@@ -16,7 +16,6 @@ importers:
       cz-conventional-changelog: ^3.3.0
       del: ^7.0.0
       esbuild: ^0.15.15
-      esbuild-sass-plugin: ^2.4.1
       eslint: ^8
       eslint-config-prettier: ^8.5.0
       eslint-plugin-import: ^2.26.0
@@ -41,7 +40,6 @@ importers:
       cz-conventional-changelog: 3.3.0
       del: 7.0.0
       esbuild: 0.15.15
-      esbuild-sass-plugin: 2.4.1
       eslint: 8.28.0
       eslint-config-prettier: 8.5.0_eslint@8.28.0
       eslint-plugin-import: 2.26.0_vfrilbydaxalswvos6uuh4sxs4
@@ -77,6 +75,7 @@ importers:
       autoprefixer: ^10.4.13
       browser-sync: ^2.27.10
       command-line-args: ^5.2.1
+      esbuild-sass-plugin: ^2.4.1
       eslint-plugin-react: ^7.31.11
       postcss: ^8.4.19
       postcss-modules: ^6.0.0
@@ -97,6 +96,7 @@ importers:
       autoprefixer: 10.4.13_postcss@8.4.19
       browser-sync: 2.27.10
       command-line-args: 5.2.1
+      esbuild-sass-plugin: 2.4.1
       eslint-plugin-react: 7.31.11
       postcss: 8.4.19
       postcss-modules: 6.0.0_postcss@8.4.19
