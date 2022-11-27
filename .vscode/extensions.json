@@ -1,0 +1,23 @@
+{
+    "recommendations": [
+        "apollographql.vscode-apollo",
+        "MS-CEINTL.vscode-language-pack-zh-hans",
+        "adam-bender.commit-message-editor",
+        "dsznajder.es7-react-js-snippets",
+        "dbaeumer.vscode-eslint",
+        "waderyan.gitblame",
+        "donjayamanne.githistory",
+        "xabikos.JavaScriptSnippets",
+        "ms-vscode.vscode-typescript-next",
+        "skyran.js-jsx-snippets",
+        "yzhang.markdown-all-in-one",
+        "shd101wyy.markdown-preview-enhanced",
+        "bierner.markdown-preview-github-styles",
+        "DavidAnson.vscode-markdownlint",
+        "christian-kohler.npm-intellisense",
+        "christian-kohler.path-intellisense",
+        "esbenp.prettier-vscode",
+        "ms-python.python",
+        "KevinRose.vsc-python-indent"
+    ]
+}
