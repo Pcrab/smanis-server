@@ -8,6 +8,8 @@
         "preinstall": "npx only-allow pnpm",
         "prepare": "husky install",
         "commit": "git-cz",
+        "dev": "pnpm run --parallel --filter frontend --filter backend --stream dev",
+        "start": "pnpm run --parallel --filter frontend --filter backend --stream start",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "config": {
