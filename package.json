@@ -8,8 +8,9 @@
         "preinstall": "npx only-allow pnpm",
         "prepare": "husky install",
         "commit": "git-cz",
+        "compile": "pnpm run --parallel --filter frontend --filter backend --stream compile",
         "dev": "pnpm run --parallel --filter frontend --filter backend --stream dev",
-        "start": "pnpm run --parallel --filter frontend --filter backend --stream start",
+        "lint": "pnpm run --parallel --filter frontend --filter backend --stream lint",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "config": {
@@ -27,11 +28,13 @@
     "devDependencies": {
         "@commitlint/cli": "^17.3.0",
         "@commitlint/config-conventional": "^17.3.0",
+        "@pcrab/prettier-config": "^0.1.0",
         "@types/node": "^18.11.9",
         "@typescript-eslint/eslint-plugin": "^5.44.0",
         "@typescript-eslint/parser": "^5.44.0",
         "chalk": "^5.1.2",
         "commitizen": "^4.2.5",
+        "concurrently": "^7.6.0",
         "cz-conventional-changelog": "^3.3.0",
         "del": "^7.0.0",
         "esbuild": "^0.15.15",

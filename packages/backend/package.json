@@ -5,13 +5,15 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
+        "compile": "ts-node --esm compile.ts",
         "dev": "nodemon",
-        "start": "ts-node --esm compile.ts",
+        "lint": "pnpm exec eslint .",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
+    "prettier": "@pcrab/prettier-config",
     "dependencies": {
         "@apollo/server": "^4.2.1",
         "dotenv": "^16.0.3",

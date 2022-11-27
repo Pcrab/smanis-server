@@ -4,8 +4,11 @@
     "description": "",
     "main": "index.js",
     "scripts": {
+        "compile": "ts-node --esm compile.ts",
         "dev": "ts-node --esm watch.ts",
-        "start": "ts-node --esm compile.ts",
+        "lint": "concurrently 'pnpm run lint:file' 'pnpm run lint:style'",
+        "lint:file": "pnpm exec eslint .",
+        "lint:style": "pnpm exec stylelint '**/*.scss'",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "keywords": [],
@@ -26,8 +29,9 @@
         "stylelint": "^14.15.0",
         "stylelint-config-prettier": "^9.0.4",
         "stylelint-config-prettier-scss": "^0.0.1",
-        "stylelint-config-standard-scss": "^6.1.0"
+        "stylelint-config-recommended-scss": "^8.0.0"
     },
+    "prettier": "@pcrab/prettier-config",
     "dependencies": {
         "react": "^18.2.0",
         "react-dom": "^18.2.0"
