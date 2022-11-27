@@ -1,12 +1,14 @@
-name: Frontend workflow
+name: Frontend and Backend workflow
 
 on:
   push:
     paths:
       - "packages/backend"
+      - "packages/frontend"
   pull_request:
     paths:
       - "packages/backend"
+      - "packages/frontend"
   workflow_dispatch:
     
 jobs:
