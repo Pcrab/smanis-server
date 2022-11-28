@@ -44,3 +44,4 @@
 
 1. 配置了 `commitlint`，因此所有 git 提交都需要遵循 [约定式提交](https://www.conventionalcommits.org/zh-hans/v1.0.0/)。
 2. 代码规范配置了 `eslint` 与 `prettier`，请尽量遵守，命名请尽量不要使用拼音。
+3. TODOs 请查看 [前端](./packages/frontend/README.md)，[后端](./packages/backend/README.md)，[算法](./algorithm/README.md)，
