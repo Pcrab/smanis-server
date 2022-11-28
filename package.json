@@ -12,6 +12,7 @@
         "compile": "pnpm run --parallel --filter frontend --filter backend --stream compile",
         "dev": "pnpm run --parallel --filter frontend --filter backend --stream dev",
         "lint": "pnpm run --parallel --filter frontend --filter backend --stream lint",
+        "ready": "concurrently 'pnpm i' 'pip install -r algorithm/requirements.txt'",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "config": {
