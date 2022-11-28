@@ -126,6 +126,7 @@ out
 .idea
 /packages/frontend/dist/assets/*
 /packages/backend/dist
+/algorithm/src/changdi.jpg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
