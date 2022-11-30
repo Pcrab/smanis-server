@@ -2,6 +2,11 @@ import * as dotenv from "dotenv";
 import { encryptPwd, signJwt, verifyJwt, verifyPwd } from "./utils/crypto.js";
 import initDb from "./utils/db.js";
 import { fastify as Fastify } from "fastify";
+import swagger from "@fastify/swagger";
+import swagger_ui from "@fastify/swagger-ui";
+
+import adminRoute from "./routes/admin/index.js";
+import allRoute from "./routes/all/index.js";
 
 // Init env
 // Then can visit any defined variables in .env through process.env.VAR_NAME
@@ -20,20 +25,53 @@ if (!(await verifyPwd(hash, "password"))) {
 // Connecting to MongoDB
 await initDb();
 
-const fastify = Fastify({
+// Init fastify
+export const fastify = Fastify({
     logger: {
         level: process.env.DEVELOPMENT === "true" ? "debug" : "info",
     },
 });
 
+// Init swagger and swagger-ui
+await fastify.register(swagger);
+await fastify.register(swagger_ui, {
+    routePrefix: "/documentation",
+    uiConfig: {
+        docExpansion: "full",
+        deepLinking: false,
+    },
+    uiHooks: {
+        onRequest: function (_request, _reply, next) {
+            next();
+        },
+        preHandler: function (_request, _reply, next) {
+            next();
+        },
+    },
+    staticCSP: true,
+    transformStaticCSP: (header) => header,
+    transformSpecification: (swaggerObject) => {
+        return swaggerObject;
+    },
+    transformSpecificationClone: true,
+});
+
 fastify.get("/hello", () => {
     return { hello: "world" };
 });
+await fastify.register(adminRoute);
+await fastify.register(allRoute);
 
-const port = 20080;
+await fastify.ready();
+
+// Start server
+const port = parseInt(process.env.PORT || "20080");
+const protocol = process.env.PROTOCOL || "http";
+const host = process.env.HOST || "127.0.0.1";
+const url = `${protocol}://${host}:${port}`;
 fastify.listen({ port }).catch((e) => {
     fastify.log.error(e);
     process.exit(1);
 });
 
-console.log(`Backend server started at port ${port}`);
+console.log(`Backend server started at ${url}`);
