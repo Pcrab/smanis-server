@@ -1,8 +1,7 @@
-import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer } from "@apollo/server/standalone";
 import * as dotenv from "dotenv";
 import { encryptPwd, signJwt, verifyJwt, verifyPwd } from "./utils/crypto.js";
 import initDb from "./utils/db.js";
+import { fastify as Fastify } from "fastify";
 
 // Init env
 // Then can visit any defined variables in .env through process.env.VAR_NAME
@@ -21,29 +20,20 @@ if (!(await verifyPwd(hash, "password"))) {
 // Connecting to MongoDB
 await initDb();
 
-const typeDefs = `#graphql
-type Book {
-    title: String
-    author: String
-}
-type Query {
-    books: [Book]
-}
-`;
-
-const resolvers = {
-    Query: {
-        books: () => [],
+const fastify = Fastify({
+    logger: {
+        level: process.env.DEVELOPMENT === "true" ? "debug" : "info",
     },
-};
-
-const server = new ApolloServer({
-    resolvers,
-    typeDefs,
 });
 
-const { url } = await startStandaloneServer(server, {
-    listen: { port: 20080 },
+fastify.get("/hello", () => {
+    return { hello: "world" };
 });
 
-console.log(`Backend server started at ${url}`);
+const port = 20080;
+fastify.listen({ port }).catch((e) => {
+    fastify.log.error(e);
+    process.exit(1);
+});
+
+console.log(`Backend server started at port ${port}`);
