@@ -1,7 +1,7 @@
-import useLogin from "../../hooks/useLogin.js";
+// import useLogin from "../../hooks/useLogin.js";
 
 const Admins = () => {
-    useLogin();
+    // useLogin("/admins");
     return <>admins</>;
 };
 

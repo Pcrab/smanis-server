@@ -18,19 +18,19 @@ const Index = () => {
 const routes = createBrowserRouter([
     // all
     { path: "/", element: <Index /> },
-    { path: "login", element: <Login /> },
+    { path: "/login", element: <Login /> },
     // "examDetails",
 
     // admins
-    { path: "students", element: <Students /> },
+    { path: "/students", element: <Students /> },
     // "studentDetails",
 
     // super admin only
-    { path: "admins", element: <Admins /> },
+    { path: "/admins", element: <Admins /> },
     // "adminDetails",
 
     // students
-    { path: "exam", element: <Exam /> },
+    { path: "/exam", element: <Exam /> },
     // "check",
 ]);
 

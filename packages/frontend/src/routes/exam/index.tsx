@@ -1,7 +1,7 @@
 import useLogin from "../../hooks/useLogin.js";
 
 const Exam = () => {
-    useLogin();
+    useLogin("/exam");
     return <>exam</>;
 };
 
