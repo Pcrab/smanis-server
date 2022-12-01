@@ -8,6 +8,7 @@ import swagger_ui from "@fastify/swagger-ui";
 import adminRoute from "./routes/admin/index.js";
 import allRoute from "./routes/all/index.js";
 import superAdminRoute from "./routes/superAdmin/index.js";
+import studentRoute from "./routes/student/index.js";
 import isProduction from "./utils/isProduction.js";
 
 // Init env
@@ -67,6 +68,7 @@ if (!isProduction()) {
 // Register routes
 await fastify.register(adminRoute);
 await fastify.register(superAdminRoute);
+await fastify.register(studentRoute);
 await fastify.register(allRoute);
 
 await fastify.ready();
