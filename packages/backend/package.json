@@ -23,11 +23,13 @@
         "argon2": "^0.30.2",
         "dotenv": "^16.0.3",
         "fastify": "^4.10.2",
+        "http-errors": "^2.0.0",
         "jsonwebtoken": "^8.5.1",
         "mongoose": "^6.7.3",
         "mongoose-autopopulate": "^0.16.1"
     },
     "devDependencies": {
+        "@types/http-errors": "^2.0.1",
         "@types/jsonwebtoken": "^8.5.9",
         "@types/nodemon": "^1.19.2",
         "nodemon": "^2.0.20"
