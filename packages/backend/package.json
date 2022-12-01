@@ -24,7 +24,8 @@
         "dotenv": "^16.0.3",
         "fastify": "^4.10.2",
         "jsonwebtoken": "^8.5.1",
-        "mongoose": "^6.7.3"
+        "mongoose": "^6.7.3",
+        "mongoose-autopopulate": "^0.16.1"
     },
     "devDependencies": {
         "@types/jsonwebtoken": "^8.5.9",

@@ -59,6 +59,7 @@ importers:
       fastify: ^4.10.2
       jsonwebtoken: ^8.5.1
       mongoose: ^6.7.3
+      mongoose-autopopulate: ^0.16.1
       nodemon: ^2.0.20
     dependencies:
       '@fastify/swagger': 8.2.0
@@ -70,6 +71,7 @@ importers:
       fastify: 4.10.2
       jsonwebtoken: 8.5.1
       mongoose: 6.7.3
+      mongoose-autopopulate: 0.16.1_mongoose@6.7.3
     devDependencies:
       '@types/jsonwebtoken': 8.5.9
       '@types/nodemon': 1.19.2
@@ -4703,6 +4705,14 @@ packages:
       saslprep: 1.0.3
     transitivePeerDependencies:
       - aws-crt
+    dev: false
+
+  /mongoose-autopopulate/0.16.1_mongoose@6.7.3:
+    resolution: {integrity: sha512-/wWogmjgAbry7E0u99E6ulwLc522ubQRNdbLdsSJEQ10DBFUOMOzNHMsNs0NhILps+vRm9xcqxSAsqav6APviQ==}
+    peerDependencies:
+      mongoose: 6.x
+    dependencies:
+      mongoose: 6.7.3
     dev: false
 
   /mongoose/6.7.3:
