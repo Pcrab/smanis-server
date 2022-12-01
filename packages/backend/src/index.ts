@@ -10,6 +10,8 @@ import allRoute from "./routes/all/index.js";
 import superAdminRoute from "./routes/superAdmin/index.js";
 import studentRoute from "./routes/student/index.js";
 import isProduction from "./utils/isProduction.js";
+import { studentModel } from "./schemas/student.js";
+import { adminModel } from "./schemas/admin.js";
 
 // Init env
 // Then can visit any defined variables in .env through process.env.VAR_NAME
@@ -17,8 +19,11 @@ dotenv.config();
 // console.log(process.env.DB_URL);
 
 // Test JWT
-const jwt = signJwt({ payload: "payload" });
-verifyJwt(jwt);
+const jwt = signJwt("id", "type");
+const result = verifyJwt(jwt);
+if (result?.id !== "id" || result?.type !== "type") {
+    throw "jwt error";
+}
 // Test PWD
 const hash = await encryptPwd("password");
 if (!(await verifyPwd(hash, "password"))) {
@@ -27,6 +32,52 @@ if (!(await verifyPwd(hash, "password"))) {
 
 // Connecting to MongoDB
 await initDb();
+
+// Init test accounts
+if (!isProduction()) {
+    if (
+        (await studentModel.find({ username: "testStudent" }).exec()).length ===
+        0
+    ) {
+        const student = new studentModel({
+            username: "testStudent",
+            password: await encryptPwd("testPassword"),
+        });
+        await student.save();
+    }
+
+    if (
+        (
+            await adminModel
+                .find({
+                    username: "testAdmin",
+                    isSuperAdmin: false,
+                })
+                .exec()
+        ).length === 0
+    ) {
+        const admin = new adminModel({
+            username: "testAdmin",
+            password: await encryptPwd("testPassword"),
+        });
+        await admin.save();
+    }
+
+    if (
+        (
+            await adminModel
+                .find({ username: "testSuperAdmin", isSuperAdmin: true })
+                .exec()
+        ).length === 0
+    ) {
+        const superAdmin = new adminModel({
+            username: "testSuperAdmin",
+            password: await encryptPwd("testPassword"),
+            isSuperAdmin: true,
+        });
+        await superAdmin.save();
+    }
+}
 
 // Init fastify
 export const fastify = Fastify({
