@@ -1,35 +1,15 @@
 import { FastifyPluginCallback } from "fastify";
-import {
-    RegisterRequest,
-    RegisterRequestType,
-    RegisterResponse,
-    RegisterResponseType,
-} from "./types.js";
+import registerRoutes from "../../utils/registerRoutes.js";
+import register from "./register.js";
 
 const route: FastifyPluginCallback = (fastify, _opts, done) => {
-    fastify.post<{
-        Body: RegisterRequestType;
-        Reply: RegisterResponseType;
-    }>(
-        "/register",
-        {
-            schema: {
-                body: RegisterRequest,
-                response: {
-                    201: RegisterResponse,
-                },
-            },
-        },
-        (request, response) => {
-            const { username } = request.body;
-            void response.status(201).send({ username, uid: 0 });
-        },
-    );
+    registerRoutes(fastify, [register]);
+
     fastify.post("/login", () => {
         return "/login";
     });
+    // Finish
     done();
-    return;
 };
 
 export default route;

@@ -7,6 +7,7 @@ import swagger_ui from "@fastify/swagger-ui";
 
 import adminRoute from "./routes/admin/index.js";
 import allRoute from "./routes/all/index.js";
+import isProduction from "./utils/isProduction.js";
 
 // Init env
 // Then can visit any defined variables in .env through process.env.VAR_NAME
@@ -28,37 +29,41 @@ await initDb();
 // Init fastify
 export const fastify = Fastify({
     logger: {
-        level: process.env.DEVELOPMENT === "true" ? "debug" : "info",
+        level: isProduction() ? "info" : "debug",
     },
 });
 
 // Init swagger and swagger-ui
-await fastify.register(swagger);
-await fastify.register(swagger_ui, {
-    routePrefix: "/documentation",
-    uiConfig: {
-        docExpansion: "full",
-        deepLinking: false,
-    },
-    uiHooks: {
-        onRequest: function (_request, _reply, next) {
-            next();
+if (!isProduction()) {
+    // add Swagger and Test route
+    await fastify.register(swagger);
+    await fastify.register(swagger_ui, {
+        routePrefix: "/documentation",
+        uiConfig: {
+            docExpansion: "full",
+            deepLinking: false,
         },
-        preHandler: function (_request, _reply, next) {
-            next();
+        uiHooks: {
+            onRequest: function (_request, _reply, next) {
+                next();
+            },
+            preHandler: function (_request, _reply, next) {
+                next();
+            },
         },
-    },
-    staticCSP: true,
-    transformStaticCSP: (header) => header,
-    transformSpecification: (swaggerObject) => {
-        return swaggerObject;
-    },
-    transformSpecificationClone: true,
-});
+        staticCSP: true,
+        transformStaticCSP: (header) => header,
+        transformSpecification: (swaggerObject) => {
+            return swaggerObject;
+        },
+        transformSpecificationClone: true,
+    });
+    fastify.get("/hello", () => {
+        return { hello: "world" };
+    });
+}
 
-fastify.get("/hello", () => {
-    return { hello: "world" };
-});
+// Register routes
 await fastify.register(adminRoute);
 await fastify.register(allRoute);
 
