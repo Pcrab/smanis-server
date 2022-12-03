@@ -1,11 +1,12 @@
-import { model, Schema, Types } from "mongoose";
+// import { model, Schema, Types } from "mongoose";
+import { model, Schema } from "mongoose";
 // import autopopulate from "mongoose-autopopulate";
-import { studentModel } from "./student.js";
+// import { studentModel } from "./student.js";
 
 interface IAdmin {
     username: string;
     password: string;
-    students: Types.Array<Types.ObjectId>;
+    // students: Types.Array<Types.ObjectId>;
     isSuperAdmin: boolean;
     createAt: Date;
     lastActiveAt: Date;
@@ -20,17 +21,17 @@ const adminSchema = new Schema<IAdmin>(
             type: String,
             required: true,
         },
-        students: {
-            type: [
-                {
-                    type: Schema.Types.ObjectId,
-                    ref: studentModel,
-                    // autopopulate: true,
-                },
-            ],
-            required: true,
-            default: [],
-        },
+        // students: {
+        //     type: [
+        //         {
+        //             type: Schema.Types.ObjectId,
+        //             ref: studentModel,
+        //             // autopopulate: true,
+        //         },
+        //     ],
+        //     required: true,
+        //     default: [],
+        // },
         isSuperAdmin: {
             type: Boolean,
             default: false,

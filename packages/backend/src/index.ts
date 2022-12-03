@@ -37,22 +37,18 @@ await initDb();
 if (!isProduction()) {
     if (
         (await studentModel.find({ username: "testStudent" }).exec()).length ===
-        0
-    ) {
-        const student = new studentModel({
-            username: "testStudent",
-            password: await encryptPwd("testPassword"),
-        });
-        await student.save();
-    }
-
-    if (
+            0 &&
         (
             await adminModel
                 .find({
                     username: "testAdmin",
                     isSuperAdmin: false,
                 })
+                .exec()
+        ).length === 0 &&
+        (
+            await adminModel
+                .find({ username: "testSuperAdmin", isSuperAdmin: true })
                 .exec()
         ).length === 0
     ) {
@@ -62,21 +58,27 @@ if (!isProduction()) {
             students: await studentModel.find().exec(),
         });
         await admin.save();
-    }
 
-    if (
-        (
-            await adminModel
-                .find({ username: "testSuperAdmin", isSuperAdmin: true })
-                .exec()
-        ).length === 0
-    ) {
+        const student1 = new studentModel({
+            username: "testStudent",
+            password: await encryptPwd("testPassword"),
+            admin: admin,
+        });
+        await student1.save();
+
         const superAdmin = new adminModel({
             username: "testSuperAdmin",
             password: await encryptPwd("testPassword"),
             isSuperAdmin: true,
         });
         await superAdmin.save();
+
+        const student2 = new studentModel({
+            username: "testStudent",
+            password: await encryptPwd("testPassword"),
+            admin: superAdmin,
+        });
+        await student2.save();
     }
 }
 

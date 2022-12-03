@@ -2,8 +2,7 @@ import { Type, Static } from "@sinclair/typebox";
 import { FastifyInstance } from "fastify";
 import mongoose from "mongoose";
 import { adminModel } from "../../schemas/admin.js";
-import { studentModel } from "../../schemas/student.js";
-import { encryptPwd, verifyJwt } from "../../utils/crypto.js";
+import { encryptPwd } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
 
 const ModifyRequest = Type.Object({
@@ -17,6 +16,7 @@ const ModifyRequest = Type.Object({
             //     "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,128}$",
         }),
     ),
+    newIsSuperAdmin: Type.Optional(Type.Boolean()),
 });
 type ModifyRequestType = Static<typeof ModifyRequest>;
 
@@ -42,10 +42,12 @@ const modify = (fastify: FastifyInstance): void => {
             },
         },
         async (request, response) => {
-            // Verify Admin
-            const { id: adminId = "", type = "" } =
-                verifyJwt(request.headers.authorization || "") || {};
-            console.log(adminId, type);
+            const {
+                id: adminId,
+                newUsername,
+                newPassword,
+                newIsSuperAdmin,
+            } = request.body;
             const adminObjectId = new mongoose.Types.ObjectId(adminId);
             const admin = await adminModel.findById(adminObjectId).exec();
             if (!admin) {
@@ -54,38 +56,20 @@ const modify = (fastify: FastifyInstance): void => {
                     .send(httpErrors.NotFound(`Admin ${adminId} not found`));
             }
 
-            // Find Student
-            const { id: studentId, newUsername, newPassword } = request.body;
-            const studentObjectId = new mongoose.Types.ObjectId(studentId);
-            const student = await studentModel.findById(studentObjectId).exec();
-            if (!student) {
-                return response
-                    .status(404)
-                    .send(
-                        httpErrors.NotFound(`Student ${studentId} not found`),
-                    );
-            }
-            if (type !== "superAdmin" && student.admin.toString() !== adminId) {
-                return response
-                    .status(401)
-                    .send(
-                        httpErrors.NotFound(
-                            `Change student ${studentId} is not allowed`,
-                        ),
-                    );
-            }
-
             // Change Student Info
             if (newUsername) {
-                student.username = newUsername;
+                admin.username = newUsername;
             }
             if (newPassword) {
-                student.password = await encryptPwd(newPassword);
+                admin.password = await encryptPwd(newPassword);
             }
-            await student.save();
+            if (newIsSuperAdmin) {
+                admin.isSuperAdmin = newIsSuperAdmin;
+            }
+            await admin.save();
             return response.status(201).send({
-                id: student._id.toString(),
-                username: student.username,
+                id: admin._id.toString(),
+                username: admin.username,
                 passwordChanged: newPassword !== undefined,
             });
         },
