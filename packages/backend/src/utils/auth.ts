@@ -23,12 +23,8 @@ const auth = (fastify: FastifyInstance, authLevel: AuthLevel) => {
         const token = request.headers.authorization || "";
         const { id, type } = verifyJwt(token) || {};
         const level = toAuthLevel(type);
-        const operateOn = (request.body as { operateOn?: string })?.operateOn;
         if (id && level && level) {
-            if (
-                level >= authLevel ||
-                (level === authLevel - 1 && id === operateOn)
-            ) {
+            if (level >= authLevel) {
                 return;
             }
         }

@@ -1,8 +1,15 @@
-import { model as Model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 import { examModel } from "./exam.js";
 // import autopopulate from "mongoose-autopopulate";
 
-const studentSchema = new Schema(
+interface IStudent {
+    username: string;
+    password: string;
+    exams: Types.Array<Types.ObjectId>;
+    createAt: Date;
+    lastActiveAt: Date;
+}
+const studentSchema = new Schema<IStudent>(
     {
         username: {
             type: String,
@@ -45,6 +52,6 @@ const studentSchema = new Schema(
 
 // studentSchema.plugin(autopopulate.default);
 
-const studentModel = Model("students", studentSchema);
+const studentModel = model("students", studentSchema);
 
-export { studentSchema, studentModel };
+export { studentSchema, studentModel, IStudent };

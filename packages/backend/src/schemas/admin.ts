@@ -1,8 +1,16 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 // import autopopulate from "mongoose-autopopulate";
 import { studentModel } from "./student.js";
 
-const adminSchema = new Schema(
+interface IAdmin {
+    username: string;
+    password: string;
+    students: Types.Array<Types.ObjectId>;
+    isSuperAdmin: boolean;
+    createAt: Date;
+    lastActiveAt: Date;
+}
+const adminSchema = new Schema<IAdmin>(
     {
         username: {
             type: String,
@@ -52,4 +60,4 @@ const adminSchema = new Schema(
 
 const adminModel = model("admins", adminSchema);
 
-export { adminSchema, adminModel };
+export { adminSchema, adminModel, IAdmin };

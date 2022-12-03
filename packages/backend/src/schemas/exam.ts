@@ -1,12 +1,17 @@
-import { model, Schema } from "mongoose";
+import { model, Schema, Types } from "mongoose";
 
-const examSchema = new Schema(
+interface IExam {
+    video: string;
+    score: number;
+    points: Types.Map<number>;
+    takenTime: Date;
+    lastUpdateTime: Date;
+}
+const examSchema = new Schema<IExam>(
     {
-        videos: {
-            type: Map,
-            of: String,
+        video: {
+            type: String,
             required: true,
-            default: [],
         },
         score: {
             type: Number,
@@ -16,7 +21,7 @@ const examSchema = new Schema(
             type: Map,
             of: Number,
             required: true,
-            default: [],
+            default: {},
         },
         takenTime: {
             type: Date,
@@ -40,4 +45,4 @@ const examSchema = new Schema(
 
 const examModel = model("exams", examSchema);
 
-export { examSchema, examModel };
+export { examSchema, examModel, IExam };

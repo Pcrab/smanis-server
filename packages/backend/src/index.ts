@@ -59,6 +59,7 @@ if (!isProduction()) {
         const admin = new adminModel({
             username: "testAdmin",
             password: await encryptPwd("testPassword"),
+            students: await studentModel.find().exec(),
         });
         await admin.save();
     }
@@ -117,9 +118,9 @@ if (!isProduction()) {
 }
 
 // Register routes
-await fastify.register(adminRoute);
-await fastify.register(superAdminRoute);
-await fastify.register(studentRoute);
+await fastify.register(adminRoute, { prefix: "/admin" });
+await fastify.register(superAdminRoute, { prefix: "/super" });
+await fastify.register(studentRoute, { prefix: "/student" });
 await fastify.register(allRoute);
 
 await fastify.ready();
