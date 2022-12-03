@@ -1,5 +1,6 @@
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
+import isProduction from "./isProduction.js";
 
 const encryptPwd = async (plain: string): Promise<string> => {
     return await argon2.hash(plain);
@@ -26,7 +27,7 @@ const signJwt = (
     if (expiresIn) {
         return jwt.sign({ id, type }, getSecret(), {
             algorithm: "HS256",
-            expiresIn: expiresIn || 3600,
+            expiresIn: expiresIn,
         });
     } else {
         return jwt.sign({ id, type }, getSecret());
@@ -37,7 +38,9 @@ const verifyJwt = (token: string): { id: string; type: string } | undefined => {
     try {
         return jwt.verify(token, getSecret()) as { id: string; type: string };
     } catch (e) {
-        console.log(e);
+        if (!isProduction()) {
+            console.log(e);
+        }
         return;
     }
 };
