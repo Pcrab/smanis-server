@@ -3,11 +3,14 @@ import { adminModel } from "./admin.js";
 import { examModel } from "./exam.js";
 // import autopopulate from "mongoose-autopopulate";
 
-interface IStudent {
+interface ISimpleStudent {
     username: string;
+    admin: Types.ObjectId;
+}
+
+interface IStudent extends ISimpleStudent {
     password: string;
     exams: Types.Array<Types.ObjectId>;
-    admin: Types.ObjectId;
     createAt: Date;
     lastActiveAt: Date;
 }
@@ -61,4 +64,4 @@ const studentSchema = new Schema<IStudent>(
 
 const studentModel = model("students", studentSchema);
 
-export { studentSchema, studentModel, IStudent };
+export { studentSchema, studentModel, IStudent, ISimpleStudent };
