@@ -6,7 +6,7 @@ import { studentModel } from "../../schemas/student.js";
 import { encryptPwd, verifyJwt } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
 
-const ModifyRequest = Type.Object({
+const ChangeStudentRequest = Type.Object({
     id: Type.String({ minLength: 12, maxLength: 24 }),
     newUsername: Type.Optional(Type.String({ minLength: 2, maxLength: 128 })),
     newPassword: Type.Optional(
@@ -18,26 +18,26 @@ const ModifyRequest = Type.Object({
         }),
     ),
 });
-type ModifyRequestType = Static<typeof ModifyRequest>;
+type ChangeStudentRequestType = Static<typeof ChangeStudentRequest>;
 
-const ModifyResponse = Type.Object({
+const ChangeStudentResponse = Type.Object({
     id: Type.String(),
     username: Type.String(),
     passwordChanged: Type.Boolean(),
 });
-type ModifyResponseType = Static<typeof ModifyResponse>;
+type ChangeStudentResponseType = Static<typeof ChangeStudentResponse>;
 
-const modify = (fastify: FastifyInstance): void => {
+const changeStudent = (fastify: FastifyInstance): void => {
     fastify.post<{
-        Body: ModifyRequestType;
-        Reply: ModifyResponseType | httpErrors.HttpError;
+        Body: ChangeStudentRequestType;
+        Reply: ChangeStudentResponseType | httpErrors.HttpError;
     }>(
         "/changeStudent",
         {
             schema: {
-                body: ModifyRequest,
+                body: ChangeStudentRequest,
                 response: {
-                    201: ModifyResponse,
+                    201: ChangeStudentResponse,
                 },
             },
         },
@@ -92,4 +92,4 @@ const modify = (fastify: FastifyInstance): void => {
     );
 };
 
-export default modify;
+export default changeStudent;
