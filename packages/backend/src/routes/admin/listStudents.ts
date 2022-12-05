@@ -6,7 +6,7 @@ import { getStudents } from "../../utils/admin/students.js";
 
 const ListStudentsRequest = Type.Object({
     // Require superAdmin
-    id: Type.Optional(Type.String()),
+    id: Type.String(),
     offset: Type.Integer(),
     count: Type.Integer(),
 });
@@ -41,19 +41,13 @@ const listStudents = (fastify: FastifyInstance): void => {
         },
         async (request, response) => {
             // Set query admin id
-            let id = "";
-            const { id: adminId = "", type } =
+            const id = request.query.id;
+            const { id: userId = "", type } =
                 verifyJwt(request.headers.authorization || "") || {};
-            if (request.query.id) {
-                if (type === "superAdmin") {
-                    id = request.query.id;
-                } else {
-                    return response
-                        .status(401)
-                        .send(httpErrors.Unauthorized("Unauthorized"));
-                }
-            } else {
-                id = adminId;
+            if (type === "admin" && id != userId) {
+                return response
+                    .status(401)
+                    .send(httpErrors.Unauthorized("Unauthorized"));
             }
             const { offset, count } = request.query;
             const searchResult = await getStudents(id, offset, count);
