@@ -8,8 +8,8 @@ interface IAdmin {
     password: string;
     // students: Types.Array<Types.ObjectId>;
     isSuperAdmin: boolean;
-    createAt: Date;
-    lastActiveAt: Date;
+    // createAt: Date;
+    // lastActiveAt: Date;
 }
 const adminSchema = new Schema<IAdmin>(
     {
@@ -37,20 +37,20 @@ const adminSchema = new Schema<IAdmin>(
             default: false,
             required: true,
         },
-        createAt: {
-            type: Date,
-            required: true,
-            default: () => {
-                return Date.now();
-            },
-        },
-        lastActiveAt: {
-            type: Date,
-            required: true,
-            default: () => {
-                return Date.now();
-            },
-        },
+        // createAt: {
+        //     type: Date,
+        //     required: true,
+        //     default: () => {
+        //         return Date.now();
+        //     },
+        // },
+        // lastActiveAt: {
+        //     type: Date,
+        //     required: true,
+        //     default: () => {
+        //         return Date.now();
+        //     },
+        // },
     },
     {
         collection: "admins",

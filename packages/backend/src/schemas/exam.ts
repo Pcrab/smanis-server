@@ -5,7 +5,7 @@ interface IExam {
     score: number;
     points: Types.Map<number>;
     takenTime: Date;
-    lastUpdateTime: Date;
+    // lastUpdateTime: Date;
 }
 const examSchema = new Schema<IExam>(
     {
@@ -30,13 +30,13 @@ const examSchema = new Schema<IExam>(
                 return Date.now();
             },
         },
-        lastUpdateTime: {
-            type: Date,
-            required: true,
-            default: () => {
-                return Date.now();
-            },
-        },
+        // lastUpdateTime: {
+        //     type: Date,
+        //     required: true,
+        //     default: () => {
+        //         return Date.now();
+        //     },
+        // },
     },
     {
         collection: "exams",

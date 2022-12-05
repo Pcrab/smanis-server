@@ -11,8 +11,8 @@ interface ISimpleStudent {
 interface IStudent extends ISimpleStudent {
     password: string;
     exams: Types.Array<Types.ObjectId>;
-    createAt: Date;
-    lastActiveAt: Date;
+    // createAt: Date;
+    // lastActiveAt: Date;
 }
 const studentSchema = new Schema<IStudent>(
     {
@@ -40,20 +40,20 @@ const studentSchema = new Schema<IStudent>(
             ref: adminModel,
             required: true,
         },
-        createAt: {
-            type: Date,
-            required: true,
-            default: () => {
-                return Date.now();
-            },
-        },
-        lastActiveAt: {
-            type: Date,
-            required: true,
-            default: () => {
-                return Date.now();
-            },
-        },
+        // createAt: {
+        //     type: Date,
+        //     required: true,
+        //     default: () => {
+        //         return Date.now();
+        //     },
+        // },
+        // lastActiveAt: {
+        //     type: Date,
+        //     required: true,
+        //     default: () => {
+        //         return Date.now();
+        //     },
+        // },
     },
     {
         collection: "students",
