@@ -1,6 +1,5 @@
 import { model, Schema, Types } from "mongoose";
 import { adminModel } from "./admin.js";
-import { examModel } from "./exam.js";
 // import autopopulate from "mongoose-autopopulate";
 
 interface ISimpleStudent {
@@ -10,7 +9,6 @@ interface ISimpleStudent {
 
 interface IStudent extends ISimpleStudent {
     password: string;
-    exams: Types.Array<Types.ObjectId>;
     // createAt: Date;
     // lastActiveAt: Date;
 }
@@ -23,17 +21,6 @@ const studentSchema = new Schema<IStudent>(
         password: {
             type: String,
             required: true,
-        },
-        exams: {
-            type: [
-                {
-                    type: Schema.Types.ObjectId,
-                    ref: examModel,
-                    // autopopulate: true,
-                },
-            ],
-            required: true,
-            default: [],
         },
         admin: {
             type: Schema.Types.ObjectId,

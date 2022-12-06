@@ -12,6 +12,7 @@ import studentRoute from "./routes/student/index.js";
 import isProduction from "./utils/isProduction.js";
 import { studentModel } from "./schemas/student.js";
 import { adminModel } from "./schemas/admin.js";
+import { examModel } from "./schemas/exam.js";
 
 // Init env
 // Then can visit any defined variables in .env through process.env.VAR_NAME
@@ -36,6 +37,7 @@ await initDb();
 // Init test accounts
 if (!isProduction()) {
     if (
+        (await examModel.find().exec()).length === 0 &&
         (await studentModel.find({ username: "testStudent" }).exec()).length ===
             0 &&
         (
@@ -79,6 +81,20 @@ if (!isProduction()) {
             admin: superAdmin,
         });
         await student2.save();
+
+        const exam1 = new examModel({
+            video: "testVideoUrl",
+            score: 0,
+            student: student1,
+        });
+        await exam1.save();
+
+        const exam2 = new examModel({
+            video: "testVideoUrl",
+            score: 0,
+            student: student2,
+        });
+        await exam2.save();
     }
 }
 
