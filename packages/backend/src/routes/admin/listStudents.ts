@@ -35,7 +35,7 @@ const listStudents = (fastify: FastifyInstance): void => {
             schema: {
                 querystring: ListStudentsRequest,
                 response: {
-                    201: ListStudentsResponse,
+                    200: ListStudentsResponse,
                 },
             },
         },
@@ -43,7 +43,7 @@ const listStudents = (fastify: FastifyInstance): void => {
             // Set query admin id
             const id = request.query.id;
             const { id: userId = "", type } =
-                verifyJwt(request.headers.authorization || "") || {};
+                verifyJwt(request.headers.authorization) || {};
             if (type === "admin" && id != userId) {
                 return response
                     .status(401)

@@ -34,7 +34,7 @@ const signJwt = (
     }
 };
 
-const verifyJwt = (token: string): { id: string; type: string } | undefined => {
+const verifyJwt = (token = ""): { id: string; type: string } | undefined => {
     try {
         return jwt.verify(token, getSecret()) as { id: string; type: string };
     } catch (e) {
