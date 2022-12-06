@@ -6,7 +6,7 @@ import { encryptPwd } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
 
 const ModifyRequest = Type.Object({
-    id: Type.String({ minLength: 12, maxLength: 24 }),
+    adminId: Type.String({ minLength: 12, maxLength: 24 }),
     newUsername: Type.Optional(Type.String({ minLength: 2, maxLength: 128 })),
     newPassword: Type.Optional(
         Type.String({
@@ -21,7 +21,7 @@ const ModifyRequest = Type.Object({
 type ModifyRequestType = Static<typeof ModifyRequest>;
 
 const ModifyResponse = Type.Object({
-    id: Type.String(),
+    adminId: Type.String(),
     username: Type.String(),
     passwordChanged: Type.Boolean(),
 });
@@ -42,12 +42,8 @@ const modify = (fastify: FastifyInstance): void => {
             },
         },
         async (request, response) => {
-            const {
-                id: adminId,
-                newUsername,
-                newPassword,
-                newIsSuperAdmin,
-            } = request.body;
+            const { adminId, newUsername, newPassword, newIsSuperAdmin } =
+                request.body;
             const adminObjectId = new mongoose.Types.ObjectId(adminId);
             const admin = await adminModel.findById(adminObjectId).exec();
             if (!admin) {
@@ -68,7 +64,7 @@ const modify = (fastify: FastifyInstance): void => {
             }
             await admin.save();
             return response.status(201).send({
-                id: admin._id.toString(),
+                adminId,
                 username: admin.username,
                 passwordChanged: newPassword !== undefined,
             });

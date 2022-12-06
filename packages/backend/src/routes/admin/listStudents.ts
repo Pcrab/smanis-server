@@ -2,11 +2,11 @@ import { Type, Static } from "@sinclair/typebox";
 import { FastifyInstance } from "fastify";
 import { verifyJwt } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
-import { getStudents } from "../../utils/admin/students.js";
+import getStudents from "../../utils/student/gets.js";
 
 const ListStudentsRequest = Type.Object({
     // Require superAdmin
-    id: Type.String(),
+    adminId: Type.String(),
     offset: Type.Integer(),
     count: Type.Integer(),
 });
@@ -17,7 +17,7 @@ const ListStudentsResponse = Type.Object({
     length: Type.Integer(),
     students: Type.Array(
         Type.Object({
-            id: Type.String(),
+            studentId: Type.String(),
             username: Type.String(),
             admin: Type.String(),
         }),
@@ -41,16 +41,19 @@ const listStudents = (fastify: FastifyInstance): void => {
         },
         async (request, response) => {
             // Set query admin id
-            const id = request.query.id;
+            const { adminId, offset, count } = request.query;
             const { id: userId = "", type } =
                 verifyJwt(request.headers.authorization) || {};
-            if (type === "admin" && id != userId) {
+            if (type === "admin" && adminId != userId) {
                 return response
                     .status(401)
                     .send(httpErrors.Unauthorized("Unauthorized"));
             }
-            const { offset, count } = request.query;
-            const searchResult = await getStudents(id, offset, count);
+            const searchResult = await getStudents({
+                adminId,
+                offset,
+                count,
+            });
             if (offset >= searchResult.length) {
                 return response
                     .status(404)
@@ -58,7 +61,7 @@ const listStudents = (fastify: FastifyInstance): void => {
             }
             const students = searchResult.students.map((student) => {
                 return {
-                    id: student._id.toString(),
+                    studentId: student._id.toString(),
                     username: student.username,
                     admin: student.admin._id.toString(),
                 };

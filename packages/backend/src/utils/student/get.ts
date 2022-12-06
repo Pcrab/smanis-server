@@ -1,7 +1,7 @@
 import { studentModel } from "../../schemas/student.js";
 
-const getStudent = async (id: string) => {
-    return await studentModel.findById(id).exec();
+const getStudent = async (studentId: string) => {
+    return await studentModel.findById(studentId).exec();
 };
 
 export default getStudent;

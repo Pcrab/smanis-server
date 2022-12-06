@@ -7,7 +7,7 @@ import { encryptPwd, verifyJwt } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
 
 const ChangeStudentRequest = Type.Object({
-    id: Type.String({ minLength: 12, maxLength: 24 }),
+    studentId: Type.String({ minLength: 12, maxLength: 24 }),
     newUsername: Type.Optional(Type.String({ minLength: 2, maxLength: 128 })),
     newPassword: Type.Optional(
         Type.String({
@@ -21,7 +21,7 @@ const ChangeStudentRequest = Type.Object({
 type ChangeStudentRequestType = Static<typeof ChangeStudentRequest>;
 
 const ChangeStudentResponse = Type.Object({
-    id: Type.String(),
+    studentId: Type.String(),
     username: Type.String(),
     passwordChanged: Type.Boolean(),
 });
@@ -55,7 +55,7 @@ const changeStudent = (fastify: FastifyInstance): void => {
             }
 
             // Find Student
-            const { id: studentId, newUsername, newPassword } = request.body;
+            const { studentId, newUsername, newPassword } = request.body;
             const studentObjectId = new mongoose.Types.ObjectId(studentId);
             const student = await studentModel.findById(studentObjectId).exec();
             if (!student) {
@@ -84,7 +84,7 @@ const changeStudent = (fastify: FastifyInstance): void => {
             }
             await student.save();
             return response.status(201).send({
-                id: student._id.toString(),
+                studentId,
                 username: student.username,
                 passwordChanged: newPassword !== undefined,
             });
