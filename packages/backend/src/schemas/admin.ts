@@ -3,14 +3,14 @@ import { model, Schema } from "mongoose";
 // import autopopulate from "mongoose-autopopulate";
 // import { studentModel } from "./student.js";
 
-interface IAdmin {
+type IAdmin = {
     username: string;
     password: string;
     // students: Types.Array<Types.ObjectId>;
     isSuperAdmin: boolean;
     // createAt: Date;
     // lastActiveAt: Date;
-}
+};
 const adminSchema = new Schema<IAdmin>(
     {
         username: {

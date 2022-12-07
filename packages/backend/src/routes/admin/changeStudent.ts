@@ -1,10 +1,11 @@
 import { Type, Static } from "@sinclair/typebox";
 import { FastifyInstance } from "fastify";
-import { encryptPwd, verifyJwt } from "../../utils/crypto.js";
+import { verifyJwt } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
 import getAdmin from "../../utils/admin/get.js";
 import getStudent from "../../utils/student/get.js";
 import setStudent from "../../utils/student/set.js";
+import { objectIdPattern, usernamePattern } from "../../utils/patterns.js";
 
 const ChangeStudentRequest = Type.Object({
     studentId: Type.String({ minLength: 12, maxLength: 24 }),
@@ -21,8 +22,8 @@ const ChangeStudentRequest = Type.Object({
 type ChangeStudentRequestType = Static<typeof ChangeStudentRequest>;
 
 const ChangeStudentResponse = Type.Object({
-    studentId: Type.String(),
-    username: Type.String(),
+    studentId: objectIdPattern,
+    username: usernamePattern,
     passwordChanged: Type.Boolean(),
 });
 type ChangeStudentResponseType = Static<typeof ChangeStudentResponse>;
@@ -76,7 +77,7 @@ const changeStudent = (fastify: FastifyInstance): void => {
             // Change Student Info
             await setStudent(student, {
                 username: newUsername,
-                password: newPassword && (await encryptPwd(newPassword)),
+                password: newPassword,
             });
 
             return response.status(201).send({

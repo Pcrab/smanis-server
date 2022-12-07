@@ -1,14 +1,14 @@
 import { model, Schema, Types } from "mongoose";
 import { studentModel } from "./student.js";
 
-interface IExam {
+type IExam = {
     video: string;
     score: number;
     points: Types.Map<number>;
     student: Types.ObjectId;
     takenTime: Date;
     // lastUpdateTime: Date;
-}
+};
 const examSchema = new Schema<IExam>(
     {
         video: {

@@ -3,10 +3,11 @@ import { FastifyInstance } from "fastify";
 import { verifyJwt } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
 import getStudents from "../../utils/student/gets.js";
+import { objectIdPattern } from "../../utils/patterns.js";
 
 const ListStudentsRequest = Type.Object({
     // Require superAdmin
-    adminId: Type.String(),
+    adminId: objectIdPattern,
     offset: Type.Integer(),
     count: Type.Integer(),
 });

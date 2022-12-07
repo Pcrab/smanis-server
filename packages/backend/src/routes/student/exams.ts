@@ -4,9 +4,10 @@ import { verifyJwt } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
 import getExams from "../../utils/exams/gets.js";
 import getStudent from "../../utils/student/get.js";
+import { objectIdPattern } from "../../utils/patterns.js";
 
 const ExamsRequest = Type.Object({
-    studentId: Type.String(),
+    studentId: objectIdPattern,
     offset: Type.Integer(),
     count: Type.Integer(),
 });

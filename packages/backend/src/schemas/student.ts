@@ -1,17 +1,18 @@
-import { model, Schema, Types } from "mongoose";
+import { model, Schema } from "mongoose";
+import IPI from "../utils/populateInterface.js";
 import { adminModel } from "./admin.js";
 // import autopopulate from "mongoose-autopopulate";
 
-interface ISimpleStudent {
+type ISimpleStudent = {
     username: string;
-    admin: Types.ObjectId;
-}
+    admin: IPI<object>;
+};
 
-interface IStudent extends ISimpleStudent {
+type IStudent = ISimpleStudent & {
     password: string;
     // createAt: Date;
     // lastActiveAt: Date;
-}
+};
 const studentSchema = new Schema<IStudent>(
     {
         username: {

@@ -1,26 +1,15 @@
 import { Type, Static } from "@sinclair/typebox";
 import { FastifyInstance } from "fastify";
-import { encryptPwd, verifyJwt, verifyPwd } from "../../utils/crypto.js";
+import { verifyJwt, verifyPwd } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
 import getAdmin from "../../utils/admin/get.js";
 import setAdmin from "../../utils/admin/set.js";
+import { passwordPattern, usernamePattern } from "../../utils/patterns.js";
 
 const ModifyRequest = Type.Object({
-    newUsername: Type.Optional(Type.String({ minLength: 2, maxLength: 128 })),
-    password: Type.String({
-        minLength: 8,
-        maxLength: 128,
-        // pattern:
-        //     "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,128}$",
-    }),
-    newPassword: Type.Optional(
-        Type.String({
-            minLength: 8,
-            maxLength: 128,
-            // pattern:
-            //     "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,128}$",
-        }),
-    ),
+    newUsername: Type.Optional(usernamePattern),
+    password: passwordPattern,
+    newPassword: Type.Optional(passwordPattern),
 });
 type ModifyRequestType = Static<typeof ModifyRequest>;
 
@@ -61,7 +50,7 @@ const modify = (fastify: FastifyInstance): void => {
             }
             await setAdmin(admin, {
                 username: newUsername,
-                password: newPassword && (await encryptPwd(newPassword)),
+                password: newPassword,
             });
             return response.status(201).send({
                 id: newUsername || admin._id.toString(),

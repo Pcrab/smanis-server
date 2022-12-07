@@ -4,20 +4,16 @@ import httpErrors from "http-errors";
 import { signJwt, verifyPwd } from "../../utils/crypto.js";
 import getStudent from "../../utils/student/get.js";
 import getAdmin from "../../utils/admin/get.js";
+import {
+    objectIdPattern,
+    passwordPattern,
+    userTypePattern,
+} from "../../utils/patterns.js";
 
 const LoginRequest = Type.Object({
-    id: Type.String({ minLength: 12, maxLength: 24 }),
-    password: Type.String({
-        minLength: 8,
-        maxLength: 128,
-        // pattern:
-        //     "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,128}$",
-    }),
-    type: Type.Union([
-        Type.Literal("admin"),
-        Type.Literal("superAdmin"),
-        Type.Literal("student"),
-    ]),
+    id: objectIdPattern,
+    password: passwordPattern,
+    type: userTypePattern,
 });
 type LoginRequestType = Static<typeof LoginRequest>;
 

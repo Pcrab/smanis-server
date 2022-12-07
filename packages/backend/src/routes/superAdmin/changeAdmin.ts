@@ -1,22 +1,19 @@
 import { Type, Static } from "@sinclair/typebox";
 import { FastifyInstance } from "fastify";
-import { encryptPwd } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
 import getAdmin from "../../utils/admin/get.js";
 import setAdmin from "../../utils/admin/set.js";
 import getSuperAdmins from "../../utils/admin/supers.js";
+import {
+    objectIdPattern,
+    passwordPattern,
+    usernamePattern,
+} from "../../utils/patterns.js";
 
 const ModifyRequest = Type.Object({
-    adminId: Type.String({ minLength: 12, maxLength: 24 }),
-    newUsername: Type.Optional(Type.String({ minLength: 2, maxLength: 128 })),
-    newPassword: Type.Optional(
-        Type.String({
-            minLength: 8,
-            maxLength: 128,
-            // pattern:
-            //     "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,128}$",
-        }),
-    ),
+    adminId: objectIdPattern,
+    newUsername: Type.Optional(usernamePattern),
+    newPassword: Type.Optional(passwordPattern),
     newIsSuperAdmin: Type.Optional(Type.Boolean()),
 });
 type ModifyRequestType = Static<typeof ModifyRequest>;
@@ -66,7 +63,7 @@ const modify = (fastify: FastifyInstance): void => {
             // Change Student Info
             await setAdmin(admin, {
                 username: newUsername,
-                password: newPassword && (await encryptPwd(newPassword)),
+                password: newPassword,
                 isSuperAdmin: Boolean(newIsSuperAdmin),
             });
             return response.status(201).send({
