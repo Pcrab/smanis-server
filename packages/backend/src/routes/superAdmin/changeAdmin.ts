@@ -1,9 +1,9 @@
 import { Type, Static } from "@sinclair/typebox";
 import { FastifyInstance } from "fastify";
-import mongoose from "mongoose";
-import { adminModel } from "../../schemas/admin.js";
 import { encryptPwd } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
+import getAdmin from "../../utils/admin/get.js";
+import setAdmin from "../../utils/admin/set.js";
 
 const ModifyRequest = Type.Object({
     adminId: Type.String({ minLength: 12, maxLength: 24 }),
@@ -44,8 +44,7 @@ const modify = (fastify: FastifyInstance): void => {
         async (request, response) => {
             const { adminId, newUsername, newPassword, newIsSuperAdmin } =
                 request.body;
-            const adminObjectId = new mongoose.Types.ObjectId(adminId);
-            const admin = await adminModel.findById(adminObjectId).exec();
+            const admin = await getAdmin(adminId);
             if (!admin) {
                 return response
                     .status(404)
@@ -53,16 +52,11 @@ const modify = (fastify: FastifyInstance): void => {
             }
 
             // Change Student Info
-            if (newUsername) {
-                admin.username = newUsername;
-            }
-            if (newPassword) {
-                admin.password = await encryptPwd(newPassword);
-            }
-            if (newIsSuperAdmin) {
-                admin.isSuperAdmin = newIsSuperAdmin;
-            }
-            await admin.save();
+            await setAdmin(admin, {
+                username: newUsername,
+                password: newPassword && (await encryptPwd(newPassword)),
+                isSuperAdmin: Boolean(newIsSuperAdmin),
+            });
             return response.status(201).send({
                 adminId,
                 username: admin.username,

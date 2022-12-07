@@ -1,9 +1,9 @@
 import { Type, Static } from "@sinclair/typebox";
 import { FastifyInstance } from "fastify";
-import mongoose from "mongoose";
-import { studentModel } from "../../schemas/student.js";
 import { encryptPwd, verifyJwt, verifyPwd } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
+import getStudent from "../../utils/student/get.js";
+import setStudent from "../../utils/student/set.js";
 
 const ModifyRequest = Type.Object({
     newUsername: Type.Optional(Type.String({ minLength: 2, maxLength: 128 })),
@@ -48,8 +48,7 @@ const modify = (fastify: FastifyInstance): void => {
         async (request, response) => {
             const { newUsername, password, newPassword } = request.body;
             const id = verifyJwt(request.headers.authorization || "")?.id || "";
-            const objectId = new mongoose.Types.ObjectId(id);
-            const student = await studentModel.findById(objectId).exec();
+            const student = await getStudent(id);
             if (!student) {
                 return response
                     .status(404)
@@ -60,16 +59,20 @@ const modify = (fastify: FastifyInstance): void => {
                     .status(401)
                     .send(httpErrors.Unauthorized(`Wrong password`));
             }
-            if (newUsername) {
-                student.username = newUsername;
-            }
-            if (newPassword) {
-                student.password = await encryptPwd(newPassword);
-            }
-            await student.save();
+            await setStudent(student, {
+                username: newUsername,
+                password: newPassword && (await encryptPwd(newPassword)),
+            });
+            // if (newUsername) {
+            //     student.username = newUsername;
+            // }
+            // if (newPassword) {
+            //     student.password = await encryptPwd(newPassword);
+            // }
+            // await student.save();
             return response.status(201).send({
                 id: student._id.toString(),
-                username: student.username,
+                username: newUsername || student.username,
                 passwordChanged: newPassword !== undefined,
             });
         },

@@ -1,10 +1,9 @@
 import { Type, Static } from "@sinclair/typebox";
 import { FastifyInstance } from "fastify";
-import mongoose from "mongoose";
 import httpErrors from "http-errors";
-import { adminModel } from "../../schemas/admin.js";
-import { studentModel } from "../../schemas/student.js";
 import { signJwt, verifyPwd } from "../../utils/crypto.js";
+import getStudent from "../../utils/student/get.js";
+import getAdmin from "../../utils/admin/get.js";
 
 const LoginRequest = Type.Object({
     id: Type.String({ minLength: 12, maxLength: 24 }),
@@ -44,15 +43,14 @@ const login = (fastify: FastifyInstance): void => {
         async (request, response) => {
             const { id, password, type } = request.body;
             let hash = "";
-            const objectId = new mongoose.Types.ObjectId(id);
             if (type === "student") {
-                const student = await studentModel.findById(objectId).exec();
+                const student = await getStudent(id);
                 hash = student?.password || "";
             } else if (type === "admin" || type === "superAdmin") {
-                const admin = await adminModel.findById(objectId).exec();
+                const admin = await getAdmin(id);
                 hash = admin?.password || "";
             }
-            if (await verifyPwd(hash, password)) {
+            if (hash !== "" && (await verifyPwd(hash, password))) {
                 void response.status(200).send({ token: signJwt(id, type) });
             } else {
                 // Login should not distinguish 404 or 400.

@@ -1,9 +1,9 @@
 import { Type, Static } from "@sinclair/typebox";
 import { FastifyInstance } from "fastify";
-import mongoose from "mongoose";
-import { adminModel } from "../../schemas/admin.js";
 import { encryptPwd, verifyJwt, verifyPwd } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
+import getAdmin from "../../utils/admin/get.js";
+import setAdmin from "../../utils/admin/set.js";
 
 const ModifyRequest = Type.Object({
     newUsername: Type.Optional(Type.String({ minLength: 2, maxLength: 128 })),
@@ -48,8 +48,7 @@ const modify = (fastify: FastifyInstance): void => {
         async (request, response) => {
             const { newUsername, password, newPassword } = request.body;
             const id = verifyJwt(request.headers.authorization || "")?.id || "";
-            const objectId = new mongoose.Types.ObjectId(id);
-            const admin = await adminModel.findById(objectId).exec();
+            const admin = await getAdmin(id);
             if (!admin) {
                 return response
                     .status(404)
@@ -60,15 +59,12 @@ const modify = (fastify: FastifyInstance): void => {
                     .status(401)
                     .send(httpErrors.Unauthorized(`Wrong password`));
             }
-            if (newUsername) {
-                admin.username = newUsername;
-            }
-            if (newPassword) {
-                admin.password = await encryptPwd(newPassword);
-            }
-            await admin.save();
+            await setAdmin(admin, {
+                username: newUsername,
+                password: newPassword && (await encryptPwd(newPassword)),
+            });
             return response.status(201).send({
-                id: admin._id.toString(),
+                id: newUsername || admin._id.toString(),
                 username: admin.username,
                 passwordChanged: newPassword !== undefined,
             });

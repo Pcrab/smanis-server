@@ -54,11 +54,6 @@ const listStudents = (fastify: FastifyInstance): void => {
                 offset,
                 count,
             });
-            if (offset >= searchResult.length) {
-                return response
-                    .status(404)
-                    .send(httpErrors.NotFound("No student matched"));
-            }
             const students = searchResult.students.map((student) => {
                 return {
                     studentId: student._id.toString(),

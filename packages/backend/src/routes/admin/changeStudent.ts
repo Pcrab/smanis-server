@@ -1,10 +1,10 @@
 import { Type, Static } from "@sinclair/typebox";
 import { FastifyInstance } from "fastify";
-import mongoose from "mongoose";
-import { adminModel } from "../../schemas/admin.js";
-import { studentModel } from "../../schemas/student.js";
 import { encryptPwd, verifyJwt } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
+import getAdmin from "../../utils/admin/get.js";
+import getStudent from "../../utils/student/get.js";
+import setStudent from "../../utils/student/set.js";
 
 const ChangeStudentRequest = Type.Object({
     studentId: Type.String({ minLength: 12, maxLength: 24 }),
@@ -46,8 +46,7 @@ const changeStudent = (fastify: FastifyInstance): void => {
             const { id: adminId = "", type = "" } =
                 verifyJwt(request.headers.authorization || "") || {};
             console.log(adminId, type);
-            const adminObjectId = new mongoose.Types.ObjectId(adminId);
-            const admin = await adminModel.findById(adminObjectId).exec();
+            const admin = await getAdmin(adminId);
             if (!admin) {
                 return response
                     .status(404)
@@ -56,8 +55,7 @@ const changeStudent = (fastify: FastifyInstance): void => {
 
             // Find Student
             const { studentId, newUsername, newPassword } = request.body;
-            const studentObjectId = new mongoose.Types.ObjectId(studentId);
-            const student = await studentModel.findById(studentObjectId).exec();
+            const student = await getStudent(studentId);
             if (!student) {
                 return response
                     .status(404)
@@ -76,13 +74,11 @@ const changeStudent = (fastify: FastifyInstance): void => {
             }
 
             // Change Student Info
-            if (newUsername) {
-                student.username = newUsername;
-            }
-            if (newPassword) {
-                student.password = await encryptPwd(newPassword);
-            }
-            await student.save();
+            await setStudent(student, {
+                username: newUsername,
+                password: newPassword && (await encryptPwd(newPassword)),
+            });
+
             return response.status(201).send({
                 studentId,
                 username: student.username,
