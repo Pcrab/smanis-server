@@ -4,6 +4,7 @@ import { encryptPwd } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
 import getAdmin from "../../utils/admin/get.js";
 import setAdmin from "../../utils/admin/set.js";
+import getSuperAdmins from "../../utils/admin/supers.js";
 
 const ModifyRequest = Type.Object({
     adminId: Type.String({ minLength: 12, maxLength: 24 }),
@@ -49,6 +50,17 @@ const modify = (fastify: FastifyInstance): void => {
                 return response
                     .status(404)
                     .send(httpErrors.NotFound(`Admin ${adminId} not found`));
+            }
+            if (
+                admin.isSuperAdmin &&
+                newIsSuperAdmin === false &&
+                (await getSuperAdmins()) <= 1
+            ) {
+                return response
+                    .status(400)
+                    .send(
+                        httpErrors.BadRequest("Cannot remove last Super Admin"),
+                    );
             }
 
             // Change Student Info
