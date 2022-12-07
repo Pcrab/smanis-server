@@ -10,32 +10,33 @@ import {
     usernamePattern,
 } from "../../utils/patterns.js";
 
-const ModifyRequest = Type.Object({
+const ChangeAdminRequest = Type.Object({
     adminId: objectIdPattern,
     newUsername: Type.Optional(usernamePattern),
     newPassword: Type.Optional(passwordPattern),
     newIsSuperAdmin: Type.Optional(Type.Boolean()),
 });
-type ModifyRequestType = Static<typeof ModifyRequest>;
+type ChangeAdminRequestType = Static<typeof ChangeAdminRequest>;
 
-const ModifyResponse = Type.Object({
+const ChangeAdminResponse = Type.Object({
     adminId: Type.String(),
     username: Type.String(),
     passwordChanged: Type.Boolean(),
+    isSuperAdmin: Type.Boolean(),
 });
-type ModifyResponseType = Static<typeof ModifyResponse>;
+type ChangeAdminResponseType = Static<typeof ChangeAdminResponse>;
 
-const modify = (fastify: FastifyInstance): void => {
+const changeAdmin = (fastify: FastifyInstance): void => {
     fastify.post<{
-        Body: ModifyRequestType;
-        Reply: ModifyResponseType | httpErrors.HttpError;
+        Body: ChangeAdminRequestType;
+        Reply: ChangeAdminResponseType | httpErrors.HttpError;
     }>(
-        "/changeStudent",
+        "/changeAdmin",
         {
             schema: {
-                body: ModifyRequest,
+                body: ChangeAdminRequest,
                 response: {
-                    201: ModifyResponse,
+                    201: ChangeAdminResponse,
                 },
             },
         },
@@ -70,9 +71,10 @@ const modify = (fastify: FastifyInstance): void => {
                 adminId,
                 username: admin.username,
                 passwordChanged: newPassword !== undefined,
+                isSuperAdmin: admin.isSuperAdmin,
             });
         },
     );
 };
 
-export default modify;
+export default changeAdmin;
