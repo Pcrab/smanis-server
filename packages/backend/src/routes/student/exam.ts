@@ -53,14 +53,16 @@ const exam = (fastify: FastifyInstance): void => {
                 verifyJwt(request.headers.authorization) || {};
             if (type !== "superAdmin") {
                 const studentId = exam.student._id.toString();
-                if (type === "student" && userId !== studentId) {
-                    return response
-                        .status(401)
-                        .send(
-                            httpErrors.Unauthorized(
-                                `Exam ${examId} is not your exam`,
-                            ),
-                        );
+                if (type === "student") {
+                    if (userId !== studentId) {
+                        return response
+                            .status(401)
+                            .send(
+                                httpErrors.Unauthorized(
+                                    `Exam ${examId} is not your exam`,
+                                ),
+                            );
+                    }
                 } else {
                     const admin = await getAdmin(userId);
                     const student = await getStudent(exam.student._id);
