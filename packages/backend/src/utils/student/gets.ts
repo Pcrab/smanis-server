@@ -1,9 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { ISimpleStudent, studentModel } from "../../schemas/student.js";
 import IPI from "../populateInterface.js";
 
 const getStudents = async (props: {
-    adminId: string;
+    adminId: string | Types.ObjectId;
     offset: number;
     count: number;
 }): Promise<{

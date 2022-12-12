@@ -4,7 +4,7 @@ import { studentModel } from "./student.js";
 type IExam = {
     video: string;
     score: number;
-    points: Types.Map<number>;
+    points: Record<string, number>;
     student: Types.ObjectId;
     takenTime: Date;
     // lastUpdateTime: Date;

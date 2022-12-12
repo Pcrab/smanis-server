@@ -1,6 +1,9 @@
-import { Model } from "mongoose";
+import { Model, Types } from "mongoose";
 
-const get = async <T extends object>(model: Model<T>, userId: string) => {
+const get = async <T extends object>(
+    model: Model<T>,
+    userId: string | Types.ObjectId,
+) => {
     return await model.findById(userId).exec();
 };
 
