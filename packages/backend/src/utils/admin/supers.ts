@@ -1,7 +1,7 @@
 import { adminModel } from "../../schemas/admin.js";
 
-const getSuperAdmins = async (): Promise<number> => {
+const getSuperAdminsCount = async (): Promise<number> => {
     return await adminModel.find({ isSuperAdmin: true }).count().exec();
 };
 
-export default getSuperAdmins;
+export default getSuperAdminsCount;

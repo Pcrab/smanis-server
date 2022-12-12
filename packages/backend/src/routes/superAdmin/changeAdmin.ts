@@ -3,7 +3,7 @@ import { FastifyInstance } from "fastify";
 import httpErrors from "http-errors";
 import getAdmin from "../../utils/admin/get.js";
 import setAdmin from "../../utils/admin/set.js";
-import getSuperAdmins from "../../utils/admin/supers.js";
+import getSuperAdminsCount from "../../utils/admin/supers.js";
 import {
     objectIdPattern,
     passwordPattern,
@@ -52,7 +52,7 @@ const changeAdmin = (fastify: FastifyInstance): void => {
             if (
                 admin.isSuperAdmin &&
                 newIsSuperAdmin === false &&
-                (await getSuperAdmins()) <= 1
+                (await getSuperAdminsCount()) <= 1
             ) {
                 return response
                     .status(400)
