@@ -46,7 +46,6 @@ const changeStudent = (fastify: FastifyInstance): void => {
             // Verify Admin
             const { id: adminId = "", type = "" } =
                 verifyJwt(request.headers.authorization || "") || {};
-            console.log(adminId, type);
             const admin = await getAdmin(adminId);
             if (!admin) {
                 return response
