@@ -5,15 +5,15 @@ import httpErrors from "http-errors";
 import getStudents from "../../utils/student/gets.js";
 import { objectIdPattern } from "../../utils/patterns.js";
 
-const ListStudentsRequest = Type.Object({
+const StudentsRequest = Type.Object({
     // Require superAdmin
     adminId: objectIdPattern,
     offset: Type.Integer(),
     count: Type.Integer(),
 });
-type ListStudentsRequestType = Static<typeof ListStudentsRequest>;
+type StudentsRequestType = Static<typeof StudentsRequest>;
 
-const ListStudentsResponse = Type.Object({
+const StudentsResponse = Type.Object({
     hasNext: Type.Boolean(),
     length: Type.Integer(),
     students: Type.Array(
@@ -24,19 +24,19 @@ const ListStudentsResponse = Type.Object({
         }),
     ),
 });
-type ListStudentsResponseType = Static<typeof ListStudentsResponse>;
+type StudentsResponseType = Static<typeof StudentsResponse>;
 
-const listStudents = (fastify: FastifyInstance): void => {
+const students = (fastify: FastifyInstance): void => {
     fastify.get<{
-        Querystring: ListStudentsRequestType;
-        Reply: ListStudentsResponseType | httpErrors.HttpError;
+        Querystring: StudentsRequestType;
+        Reply: StudentsResponseType | httpErrors.HttpError;
     }>(
-        "/listStudents",
+        "/students",
         {
             schema: {
-                querystring: ListStudentsRequest,
+                querystring: StudentsRequest,
                 response: {
-                    200: ListStudentsResponse,
+                    200: StudentsResponse,
                 },
             },
         },
@@ -67,4 +67,4 @@ const listStudents = (fastify: FastifyInstance): void => {
     );
 };
 
-export default listStudents;
+export default students;
