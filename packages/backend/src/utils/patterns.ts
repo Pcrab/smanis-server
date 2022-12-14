@@ -23,4 +23,12 @@ const objectIdPattern = Type.String({
     maxLength: 24,
 });
 
-export { usernamePattern, passwordPattern, userTypePattern, objectIdPattern };
+const pointsPattern = Type.Record(Type.String(), Type.Integer());
+
+export {
+    usernamePattern,
+    passwordPattern,
+    userTypePattern,
+    objectIdPattern,
+    pointsPattern,
+};

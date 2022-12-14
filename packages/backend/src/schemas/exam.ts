@@ -2,10 +2,13 @@ import { model, Schema } from "mongoose";
 import IPI from "../utils/populateInterface.js";
 import { studentModel } from "./student.js";
 
-type IExam = {
-    video: string;
+type IExamUpdate = {
     score: number;
     points: Record<string, number>;
+};
+
+type IExam = IExamUpdate & {
+    video: string;
     student: IPI<object>;
     takenTime: Date;
     // lastUpdateTime: Date;
@@ -53,4 +56,4 @@ const examSchema = new Schema<IExam>(
 
 const examModel = model("exams", examSchema);
 
-export { examSchema, examModel, IExam };
+export { examSchema, examModel, IExam, IExamUpdate };
