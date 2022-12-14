@@ -1,11 +1,12 @@
-import { model, Schema, Types } from "mongoose";
+import { model, Schema } from "mongoose";
+import IPI from "../utils/populateInterface.js";
 import { studentModel } from "./student.js";
 
 type IExam = {
     video: string;
     score: number;
     points: Record<string, number>;
-    student: Types.ObjectId;
+    student: IPI<object>;
     takenTime: Date;
     // lastUpdateTime: Date;
 };
@@ -34,7 +35,7 @@ const examSchema = new Schema<IExam>(
             type: Date,
             required: true,
             default: () => {
-                return Date.now();
+                return new Date(Date.now());
             },
         },
         // lastUpdateTime: {
