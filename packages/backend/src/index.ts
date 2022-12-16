@@ -1,11 +1,16 @@
 import * as dotenv from "dotenv";
-import { encryptPwd, signJwt, verifyJwt, verifyPwd } from "./utils/crypto.js";
+// Init env
+// Then can visit any defined variables in .env through process.env.VAR_NAME
+dotenv.config();
+// Finish init
 import initDb from "./utils/db.js";
 import { fastify as Fastify } from "fastify";
 import swagger from "@fastify/swagger";
 import swagger_ui from "@fastify/swagger-ui";
+import multipart from "@fastify/multipart";
 
 import adminRoute from "./routes/admin/index.js";
+import { encryptPwd, signJwt, verifyJwt, verifyPwd } from "./utils/crypto.js";
 import allRoute from "./routes/all/index.js";
 import superAdminRoute from "./routes/superAdmin/index.js";
 import studentRoute from "./routes/student/index.js";
@@ -13,11 +18,12 @@ import isProduction from "./utils/isProduction.js";
 import { studentModel } from "./schemas/student.js";
 import { adminModel } from "./schemas/admin.js";
 import { examModel } from "./schemas/exam.js";
+import client from "./utils/oss.js";
 
-// Init env
-// Then can visit any defined variables in .env through process.env.VAR_NAME
-dotenv.config();
 // console.log(process.env.DB_URL);
+
+// Test oss
+client;
 
 // Test JWT
 const jwt = signJwt("id", "type");
@@ -134,6 +140,8 @@ if (!isProduction()) {
         return { hello: "world" };
     });
 }
+
+await fastify.register(multipart, { attachFieldsToBody: true });
 
 // Register routes
 await fastify.register(adminRoute, { prefix: "/admin" });

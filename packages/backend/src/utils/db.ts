@@ -10,6 +10,7 @@ const initDb = async () => {
         env.DB_URL || "localhost:27017"
     }/${env.DB_NAME || "smanis"}?authSource=admin`;
     console.log(`Connecting to MongoDB ${mongoUrl}`);
+    mongoose.set("strictQuery", false);
     await mongoose.connect(mongoUrl);
     console.log("Connect succeeded");
 };

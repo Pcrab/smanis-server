@@ -1,6 +1,7 @@
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import isProduction from "./isProduction.js";
+import { createHash } from "crypto";
 
 const encryptPwd = async (plain: string): Promise<string> => {
     return await argon2.hash(plain);
@@ -45,4 +46,8 @@ const verifyJwt = (token = ""): { id: string; type: string } | undefined => {
     }
 };
 
-export { encryptPwd, verifyPwd, signJwt, verifyJwt };
+const digest = (text: string): string => {
+    return createHash("sha3-512").update(text).digest("hex");
+};
+
+export { encryptPwd, verifyPwd, signJwt, verifyJwt, digest };
