@@ -18,6 +18,9 @@ const LoginRequest = Type.Object({
 type LoginRequestType = Static<typeof LoginRequest>;
 
 const LoginResponse = Type.Object({
+    id: Type.String(),
+    username: Type.String(),
+    type: Type.String(),
     token: Type.String(),
 });
 type LoginResponseType = Static<typeof LoginResponse>;
@@ -39,15 +42,24 @@ const login = (fastify: FastifyInstance): void => {
         async (request, response) => {
             const { id, password, type } = request.body;
             let hash = "";
+            let username = "";
             if (type === "student") {
                 const student = await getStudent(id);
+                username = student?.username || "";
                 hash = student?.password || "";
             } else if (type === "admin" || type === "superAdmin") {
                 const admin = await getAdmin(id);
+                username = admin?.username || "";
                 hash = admin?.password || "";
             }
-            if (hash !== "" && (await verifyPwd(hash, password))) {
-                void response.status(200).send({ token: signJwt(id, type) });
+            if (
+                username !== "" &&
+                hash !== "" &&
+                (await verifyPwd(hash, password))
+            ) {
+                void response
+                    .status(200)
+                    .send({ token: signJwt(id, type), id, type, username });
             } else {
                 // Login should not distinguish 404 or 400.
                 void response
