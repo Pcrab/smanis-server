@@ -3,7 +3,7 @@ import { auth, AuthLevel } from "../../utils/auth.js";
 import registerRoutes from "../../utils/registerRoutes.js";
 import modify from "./modify.js";
 import changeStudent from "./changeStudent.js";
-import students from "./listStudents.js";
+import students from "./students.js";
 import submitExam from "./submitExam.js";
 import changeExam from "./changeExam.js";
 
