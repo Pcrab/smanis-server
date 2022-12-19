@@ -8,7 +8,7 @@ import setStudent from "../../utils/student/set.js";
 import { objectIdPattern, usernamePattern } from "../../utils/patterns.js";
 
 const ChangeStudentRequest = Type.Object({
-    studentId: Type.String({ minLength: 12, maxLength: 24 }),
+    studentId: Type.String(objectIdPattern),
     newUsername: Type.Optional(Type.String({ minLength: 2, maxLength: 128 })),
     newPassword: Type.Optional(
         Type.String({
@@ -18,6 +18,7 @@ const ChangeStudentRequest = Type.Object({
             //     "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,128}$",
         }),
     ),
+    newAdminId: Type.Optional(objectIdPattern),
 });
 type ChangeStudentRequestType = Static<typeof ChangeStudentRequest>;
 
@@ -44,8 +45,8 @@ const changeStudent = (fastify: FastifyInstance): void => {
         },
         async (request, response) => {
             // Verify Admin
-            const { id: adminId = "", type = "" } =
-                verifyJwt(request.headers.authorization || "") || {};
+            const adminId =
+                verifyJwt(request.headers.authorization || "")?.id || "";
             const admin = await getAdmin(adminId);
             if (!admin) {
                 return response
@@ -63,7 +64,7 @@ const changeStudent = (fastify: FastifyInstance): void => {
                         httpErrors.NotFound(`Student ${studentId} not found`),
                     );
             }
-            if (type !== "superAdmin" && student.admin.toString() !== adminId) {
+            if (!admin.isSuperAdmin && student.admin.toString() !== adminId) {
                 return response
                     .status(401)
                     .send(

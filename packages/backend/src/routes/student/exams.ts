@@ -5,9 +5,10 @@ import httpErrors from "http-errors";
 import getExams from "../../utils/exams/gets.js";
 import getStudent from "../../utils/student/get.js";
 import { objectIdPattern } from "../../utils/patterns.js";
+import getAdmin from "../../utils/admin/get.js";
 
 const ExamsRequest = Type.Object({
-    studentId: objectIdPattern,
+    studentId: Type.Optional(objectIdPattern),
     offset: Type.Integer(),
     count: Type.Integer(),
 });
@@ -44,19 +45,31 @@ const exams = (fastify: FastifyInstance): void => {
             const { studentId, offset, count } = request.query;
             const { id: userId = "", type } =
                 verifyJwt(request.headers.authorization) || {};
-            if (type === "student" && studentId != userId) {
-                return response
-                    .status(401)
-                    .send(httpErrors.Unauthorized("Unauthorized"));
-            }
-            const student = await getStudent(studentId);
-            if (type === "admin" && student?.admin._id.toString() !== userId) {
-                return response
-                    .status(401)
-                    .send(httpErrors.Unauthorized("Not your student"));
+            let id = "";
+            if (type === "student") {
+                id = userId;
+            } else {
+                if (!studentId) {
+                    return response
+                        .status(400)
+                        .send(httpErrors.BadRequest("StudentId is required"));
+                }
+                const admin = await getAdmin(userId);
+                const student = await getStudent(studentId);
+                if (
+                    !admin ||
+                    !student ||
+                    (!admin.isSuperAdmin &&
+                        student.admin._id.toString() !== admin._id.toString())
+                ) {
+                    return response
+                        .status(403)
+                        .send(httpErrors.Forbidden("Not your student"));
+                }
+                id = student._id.toString();
             }
             const { hasNext, length, exams } = await getExams({
-                studentId,
+                studentId: id,
                 offset,
                 count,
             });

@@ -36,7 +36,7 @@ const changeExam = (fastify: FastifyInstance): void => {
         },
         async (request, response) => {
             // Verify Admin
-            const { id: adminId = "", type = "" } =
+            const { id: adminId = "" } =
                 verifyJwt(request.headers.authorization || "") || {};
             const admin = await getAdmin(adminId);
             if (!admin) {
@@ -53,7 +53,7 @@ const changeExam = (fastify: FastifyInstance): void => {
                     .status(404)
                     .send(httpErrors.NotFound(`Exam ${examId} not found`));
             }
-            if (type !== "superAdmin") {
+            if (!admin.isSuperAdmin) {
                 const student = await getStudent(exam.student._id);
                 if (!student || student.admin._id.toString() !== adminId) {
                     return response

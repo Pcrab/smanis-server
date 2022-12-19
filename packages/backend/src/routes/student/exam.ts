@@ -51,36 +51,35 @@ const exam = (fastify: FastifyInstance): void => {
 
             const { id: userId = "", type } =
                 verifyJwt(request.headers.authorization) || {};
-            if (type !== "superAdmin") {
-                const studentId = exam.student._id.toString();
-                if (type === "student") {
-                    if (userId !== studentId) {
-                        return response
-                            .status(401)
-                            .send(
-                                httpErrors.Unauthorized(
-                                    `Exam ${examId} is not your exam`,
-                                ),
-                            );
-                    }
-                } else {
-                    const admin = await getAdmin(userId);
-                    const student = await getStudent(exam.student._id);
+            const studentId = exam.student._id.toString();
+            if (type === "admin") {
+                const admin = await getAdmin(userId);
+                if (!admin || !admin.isSuperAdmin) {
+                    const student = await getStudent(studentId);
                     if (
-                        !admin ||
                         !student ||
-                        admin._id.toString() !== student.admin._id.toString()
+                        student.admin._id.toString() !== admin?._id.toString()
                     ) {
                         return response
-                            .status(401)
+                            .status(403)
                             .send(
-                                httpErrors.Unauthorized(
-                                    `Student ${exam.student._id.toString()} is not your student`,
-                                ),
+                                httpErrors.Forbidden("Not your student's exam"),
                             );
                     }
                 }
+            } else {
+                // Student
+                if (userId !== studentId) {
+                    return response
+                        .status(401)
+                        .send(
+                            httpErrors.Unauthorized(
+                                `Exam ${examId} is not your exam`,
+                            ),
+                        );
+                }
             }
+
             return response.status(200).send({
                 examId: exam._id.toString(),
                 video: exam.video,

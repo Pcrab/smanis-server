@@ -1,9 +1,9 @@
 import { FastifyPluginCallback } from "fastify";
 import registerRoutes from "../../utils/registerRoutes.js";
-import login from "./login.js";
+import loginStudent from "./loginStudent.js";
 
 const route: FastifyPluginCallback = (fastify, _opts, done) => {
-    registerRoutes(fastify, [login]);
+    registerRoutes(fastify, [loginStudent]);
 
     // Finish
     done();

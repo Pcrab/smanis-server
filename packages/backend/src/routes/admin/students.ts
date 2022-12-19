@@ -4,10 +4,11 @@ import { verifyJwt } from "../../utils/crypto.js";
 import httpErrors from "http-errors";
 import getStudents from "../../utils/student/gets.js";
 import { objectIdPattern } from "../../utils/patterns.js";
+import getAdmin from "../../utils/admin/get.js";
 
 const StudentsRequest = Type.Object({
     // Require superAdmin
-    adminId: objectIdPattern,
+    adminId: Type.Optional(objectIdPattern),
     offset: Type.Integer(),
     count: Type.Integer(),
 });
@@ -42,16 +43,25 @@ const students = (fastify: FastifyInstance): void => {
         },
         async (request, response) => {
             // Set query admin id
-            const { adminId, offset, count } = request.query;
-            const { id: userId = "", type } =
-                verifyJwt(request.headers.authorization) || {};
-            if (type === "admin" && adminId != userId) {
+            const userId = verifyJwt(request.headers.authorization)?.id || "";
+            const admin = await getAdmin(userId);
+            if (!admin) {
                 return response
-                    .status(401)
-                    .send(httpErrors.Unauthorized("Unauthorized"));
+                    .status(404)
+                    .send(httpErrors.NotFound("Admin not found."));
+            }
+            const { adminId, offset, count } = request.query;
+            if (adminId && adminId !== userId && !admin.isSuperAdmin) {
+                return response
+                    .status(403)
+                    .send(
+                        httpErrors.Forbidden(
+                            "Need to be superAdmin to get other admin's students.",
+                        ),
+                    );
             }
             const searchResult = await getStudents({
-                adminId,
+                adminId: adminId || userId,
                 offset,
                 count,
             });

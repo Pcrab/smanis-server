@@ -36,29 +36,38 @@ const modify = (fastify: FastifyInstance): void => {
         },
         async (request, response) => {
             const { newUsername, password, newPassword } = request.body;
-            const id = verifyJwt(request.headers.authorization || "")?.id || "";
-            const student = await getStudent(id);
-            if (!student) {
+            const { id: userId = "", type } =
+                verifyJwt(request.headers.authorization || "") || {};
+            let student;
+            if (type !== "student") {
                 return response
-                    .status(404)
-                    .send(httpErrors.NotFound(`User ${id} not found`));
-            }
-            if (!(await verifyPwd(student.password, password))) {
-                return response
-                    .status(401)
-                    .send(httpErrors.Unauthorized(`Wrong password`));
+                    .status(403)
+                    .send(
+                        httpErrors.Forbidden(
+                            "You are not a student. If you are an admin, please use admin/changeStudent instead.",
+                        ),
+                    );
+            } else {
+                student = await getStudent(userId);
+                if (
+                    !student ||
+                    !password ||
+                    !(await verifyPwd(student.password, password))
+                ) {
+                    return response
+                        .status(401)
+                        .send(
+                            httpErrors.Unauthorized(
+                                `Need student's correct password.`,
+                            ),
+                        );
+                }
             }
             await setStudent(student, {
                 username: newUsername,
                 password: newPassword,
             });
-            // if (newUsername) {
-            //     student.username = newUsername;
-            // }
-            // if (newPassword) {
-            //     student.password = await encryptPwd(newPassword);
-            // }
-            // await student.save();
+
             return response.status(201).send({
                 id: student._id.toString(),
                 username: newUsername || student.username,
