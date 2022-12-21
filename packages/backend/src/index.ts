@@ -123,10 +123,21 @@ if (!isProduction()) {
             deepLinking: false,
         },
         uiHooks: {
-            onRequest: (_request, _reply, next) => {
+            // Following two functions should compile fine without type definitions,
+            // but sometimes vscode will show error, so I have to declare
+            // types here to avoid that.
+            onRequest: (
+                _request: unknown,
+                _reply: unknown,
+                next: () => unknown,
+            ) => {
                 next();
             },
-            preHandler: (_request, _reply, next) => {
+            preHandler: (
+                _request: unknown,
+                _reply: unknown,
+                next: () => unknown,
+            ) => {
                 next();
             },
         },
