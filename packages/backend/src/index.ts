@@ -8,6 +8,7 @@ import { fastify as Fastify } from "fastify";
 import swagger from "@fastify/swagger";
 import swagger_ui from "@fastify/swagger-ui";
 import multipart from "@fastify/multipart";
+import cors from "@fastify/cors";
 
 import adminRoute from "./routes/admin/index.js";
 import { encryptPwd, signJwt, verifyJwt, verifyPwd } from "./utils/crypto.js";
@@ -122,10 +123,10 @@ if (!isProduction()) {
             deepLinking: false,
         },
         uiHooks: {
-            onRequest: function (_request, _reply, next) {
+            onRequest: (_request, _reply, next) => {
                 next();
             },
-            preHandler: function (_request, _reply, next) {
+            preHandler: (_request, _reply, next) => {
                 next();
             },
         },
@@ -142,6 +143,9 @@ if (!isProduction()) {
 }
 
 await fastify.register(multipart, { attachFieldsToBody: true });
+await fastify.register(cors, {
+    allowedHeaders: ["Content-Type", "Authorization"],
+});
 
 // Register routes
 await fastify.register(adminRoute, { prefix: "/admin" });
