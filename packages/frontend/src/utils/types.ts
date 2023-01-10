@@ -10,14 +10,17 @@ const allRoutes = [
 ] as const;
 type AllRoutes = typeof allRoutes[number];
 
-const adminRoutes = ["/students", "/newStudent", "/exam"] as const;
+const studentRoutes = ["/student", "/exam"] as const;
+type StudentRoutes = typeof studentRoutes[number];
+
+const adminRoutes = ["/admin", "/students", "/newStudent", "/exam"] as const;
 type AdminRoutes = typeof adminRoutes[number];
 
-const superAdminRoutes = ["/admins", "/newAdmin"] as const;
+const superAdminRoutes = ["/superAdmin", "/admins", "/newAdmin"] as const;
 type SuperAdminRoutes = typeof superAdminRoutes[number];
 
 const routes = [...allRoutes, ...adminRoutes, ...superAdminRoutes];
-type Routes = AllRoutes | AdminRoutes | SuperAdminRoutes;
+type Routes = AllRoutes | StudentRoutes | AdminRoutes | SuperAdminRoutes;
 
 export {
     userType,
@@ -25,6 +28,8 @@ export {
     Routes,
     allRoutes,
     AllRoutes,
+    studentRoutes,
+    StudentRoutes,
     adminRoutes,
     AdminRoutes,
     superAdminRoutes,

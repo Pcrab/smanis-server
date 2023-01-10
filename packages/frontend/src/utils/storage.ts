@@ -1,8 +1,10 @@
-type userType = "superAdmin" | "admin" | "student" | string;
+type userType = "admin" | "student" | string;
 
 interface storageItems {
     authKey: string;
+    userId: string;
     userType: userType;
+    isSuperAdmin: string;
 }
 
 const getStorageItem = <T extends keyof storageItems>(

@@ -1,11 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.scss";
-import style from "./index.module.scss";
-import remoteUrl from "./utils/url.js";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Admins from "./routes/admins/index.js";
-import Students from "./routes/students/index.js";
+import Admins from "./routes/admin/index.js";
+import Students from "./routes/student/index.js";
 import Exam from "./routes/exam/index.js";
 import Login from "./routes/login/index.js";
 import useLogin from "./hooks/useLogin.js";
@@ -37,6 +35,5 @@ const routes = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
     <React.StrictMode>
         <RouterProvider router={routes} />
-        <div className={style.test}>{remoteUrl}</div>
     </React.StrictMode>,
 );

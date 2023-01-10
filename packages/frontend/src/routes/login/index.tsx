@@ -11,7 +11,8 @@ const Login = () => {
     const [password, setPassword] = useState("");
 
     const login = (username: string, password: string) => {
-        console.log(username, password);
+        username;
+        password;
         const userType: userType = "student";
         if (canJump(userType, jumpTo as Routes)) {
             navigate(jumpTo);
@@ -37,7 +38,7 @@ const Login = () => {
             />
             <div
                 onClick={() => {
-                    login(username, password);
+                    void login(username, password);
                 }}
             >
                 login

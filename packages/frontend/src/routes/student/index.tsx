@@ -1,8 +1,8 @@
 import useLogin from "../../hooks/useLogin.js";
 
 const Students = () => {
-    useLogin("/students");
-    return <>students</>;
+    useLogin("/student", "student");
+    return <>student</>;
 };
 
 export default Students;
