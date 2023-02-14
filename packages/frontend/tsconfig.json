@@ -1,9 +1,0 @@
-{
-    "extends": "../tsconfig.settings.json",
-    "compilerOptions": {
-        "lib": ["DOM", "DOM.Iterable"],
-        "composite": true,
-        "jsx": "react-jsx"
-    },
-    "include": ["src/**/*", "esbuild.ts", "watch.ts", "compile.ts"]
-}
