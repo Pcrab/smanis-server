@@ -61,7 +61,7 @@ if (!isProduction()) {
                 .exec()
         ).length === 0
     ) {
-	const testPassword = "aA1!aA1!";
+        const testPassword = "aA1!aA1!";
         const admin = new adminModel({
             username: "testAdmin",
             password: await encryptPwd(testPassword),
