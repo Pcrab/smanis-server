@@ -61,30 +61,31 @@ if (!isProduction()) {
                 .exec()
         ).length === 0
     ) {
+	const testPassword = "aA1!aA1!";
         const admin = new adminModel({
             username: "testAdmin",
-            password: await encryptPwd("testPassword"),
+            password: await encryptPwd(testPassword),
             students: await studentModel.find().exec(),
         });
         await admin.save();
 
         const student1 = new studentModel({
             username: "testStudent",
-            password: await encryptPwd("testPassword"),
+            password: await encryptPwd(testPassword),
             admin: admin,
         });
         await student1.save();
 
         const superAdmin = new adminModel({
             username: "testSuperAdmin",
-            password: await encryptPwd("testPassword"),
+            password: await encryptPwd(testPassword),
             isSuperAdmin: true,
         });
         await superAdmin.save();
 
         const student2 = new studentModel({
             username: "testStudent",
-            password: await encryptPwd("testPassword"),
+            password: await encryptPwd(testPassword),
             admin: superAdmin,
         });
         await student2.save();
@@ -171,7 +172,7 @@ const port = parseInt(process.env.PORT || "20080");
 const protocol = process.env.PROTOCOL || "http";
 const host = process.env.HOST || "127.0.0.1";
 const url = `${protocol}://${host}:${port}`;
-fastify.listen({ port }).catch((e) => {
+fastify.listen({ port, host }).catch((e) => {
     fastify.log.error(e);
     process.exit(1);
 });
