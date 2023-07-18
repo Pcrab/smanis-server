@@ -68,7 +68,7 @@
         "fastify": "^4.13.0",
         "http-errors": "^2.0.0",
         "jsonwebtoken": "^9.0.0",
-        "mongoose": "^6.9.1",
+        "mongoose": "^6.11.3",
         "mongoose-autopopulate": "^0.17.1"
     }
 }
